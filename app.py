@@ -38,11 +38,7 @@ def get_random_image():
     filename = "images/random-face.jpg"
     with open(filename, "wb") as file:
         file.write(image.content)
-
-    
-
-    
-    return "soon will work"
+    return "image has been created"
 
 def get_image_info_from_aws():
     return "soon implemented"
