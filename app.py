@@ -1,8 +1,8 @@
 from flask import Flask
 import requests
+import boto3
 
 app = Flask(__name__)
-
 
 # Index page
 @app.route('/', methods=['GET'])
@@ -15,7 +15,16 @@ def get_random_image():
 
 
 def get_image_info_from_aws():
-    return "soon implemented"
+    photo="photo.png"
+    client=boto3.client('rekognition')
+    with open(photo, 'rb') as image:
+        response = client.detect_labels(Image={'Bytes': image.read()})
+        
+    print('Detected labels in ' + photo)    
+    for label in response['Labels']:
+        print (label['Name'] + ' : ' + str(label['Confidence']))
+
+    return len(response['Labels'])
 
 def send_info_to_chat_gpt():
     return "soon implemented"
