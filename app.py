@@ -28,8 +28,9 @@ def get_image_info_from_aws():
     for faceDetail in response['FaceDetails']:
         print('The detected face is between ' + str(faceDetail['AgeRange']['Low']) 
               + ' and ' + str(faceDetail['AgeRange']['High']) + ' years old')
+        print("gender" + str(faceDetail['Gender']['Value']) + "with" + str(faceDetail['Gender']['Confidence']) + "%" )
         print('Here are the other attributes:')
-        get_fields(json.dumps(faceDetail, indent=4, sort_keys=True))
+        #print(json.dumps(faceDetail, indent=4, sort_keys=True))
 
 def send_info_to_chat_gpt():
     return "soon implemented"
@@ -38,18 +39,18 @@ def render_result():
     return "soon implemented" 
 
 
-def get_fields(data):
-    data = json.load(data)
-    gender = data['Gender']['Value']
-    smile = None
-    if 'Smile' in data:
-        smile = data['Smile']['Value']
-    age = (data['AgeRange']['High'] + data['AgeRange']['Low']) // 2
+# def get_fields(data):
+#     data = json.load(data)
+#     gender = data['Gender']['Value']
+#     smile = None
+#     if 'Smile' in data:
+#         smile = data['Smile']['Value']
+#     age = (data['AgeRange']['High'] + data['AgeRange']['Low']) // 2
 
-    # Print the extracted fields
-    print(f"Gender: {gender}")
-    print(f"Smile: {smile}")
-    print(f"Age: {age}")
+#     # Print the extracted fields
+#     print(f"Gender: {gender}")
+#     print(f"Smile: {smile}")
+#     print(f"Age: {age}")
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True)
