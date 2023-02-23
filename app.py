@@ -52,5 +52,4 @@ def render_result():
 
 
 if __name__ == '__main__':
-    get_random_image()
     app.run(host='0.0.0.0',debug=True)
