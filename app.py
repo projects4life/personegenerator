@@ -9,7 +9,6 @@ app = Flask(__name__)
 # Index page
 @app.route('/', methods=['GET'])
 def index():
-    print(get_image_info_from_aws())
     return 'soon be implemented'
 
 # gets image from this person does not exists
@@ -26,11 +25,16 @@ def get_image_info_from_aws():
     
     print('Detected faces for ' + photo)    
     for faceDetail in response['FaceDetails']:
-        print('The detected face is between ' + str(faceDetail['AgeRange']['Low']) 
-              + ' and ' + str(faceDetail['AgeRange']['High']) + ' years old')
-        print("gender" + str(faceDetail['Gender']['Value']) + "with" + str(faceDetail['Gender']['Confidence']) + "%" )
-        print('Here are the other attributes:')
-        #print(json.dumps(faceDetail, indent=4, sort_keys=True))
+        print('The detected face is around ' + str(int(faceDetail['AgeRange']['Low']) + int(faceDetail['AgeRange']['High']) / 2 ))
+        age = str(int(faceDetail['AgeRange']['Low']) + int(faceDetail['AgeRange']['High']) / 2 )
+        print("gender: " + str(faceDetail['Gender']['Value']) + " with " + str(faceDetail['Gender']['Confidence']) + "%" )
+        gender = str(faceDetail['Gender']['Value'])
+        print("smile" + str(faceDetail['Smile']['Value']) + "with" + str(faceDetail['Smile']['Confidence']) + "%" )
+        smile = str(faceDetail['Smile']['Value'])
+        #print(json.dumps(faceDetail, indent=4, sort_keys=True)) ##### to print the whole list    
+    
+    full = "smile: " + smile + "\n" + "age~: " + age + "gender: " + gender
+    return full
 
 def send_info_to_chat_gpt():
     return "soon implemented"
