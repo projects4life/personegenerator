@@ -58,7 +58,7 @@ def get_image_info_from_aws(photo):
     The function uses the boto3 library to interact with the AWS Rekognition service.
 
     Usage:
-    To use this function, you need to have an AWS account and have the boto3 library installed. You also need to have an image named "photo.jpg" in the same directory as the script.
+    To use this function, you need to have an AWS account and have the boto3 library installed.
 
     Example:
     Output of the function call:
