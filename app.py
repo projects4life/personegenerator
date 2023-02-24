@@ -1,13 +1,17 @@
+#!/usr/bin/env python3
 from flask import Flask
 import requests
+import boto3
+import json
 from bs4 import BeautifulSoup
 
 app = Flask(__name__)
 
-
 # Index page
 @app.route('/', methods=['GET'])
 def index():
+    photo=get_random_image()
+    description=get_image_info_from_aws(photo)
     return 'soon be implemented'
 
 
@@ -38,10 +42,47 @@ def get_random_image():
     filename = "images/random-face.jpg"
     with open(filename, "wb") as file:
         file.write(image.content)
-    return "image has been created"
+    return filename
 
-def get_image_info_from_aws():
-    return "soon implemented"
+def get_image_info_from_aws(photo):
+    '''
+    Function Name: get_image_info_from_aws()
+
+    Description:
+    This function uses the AWS Rekognition service to detect faces in an image and extract information about the faces detected such as age, gender, and smile. The function takes no input parameters.
+
+    Return:
+    The function returns a string with the extracted information about the faces detected in the image. The string includes the smile value, age, and gender of each face detected.
+
+    Libraries Used:
+    The function uses the boto3 library to interact with the AWS Rekognition service.
+
+    Usage:
+    To use this function, you need to have an AWS account and have the boto3 library installed.
+
+    Example:
+    Output of the function call:
+    Detected faces for photo.jpg
+    The detected face is around 35.0
+    gender: Male with 99.98998260498047%
+    smile: False with 0.0009966576413214808%
+    'smile: False, age~: 35.0, gender: Male'
+    '''
+    client=boto3.client('rekognition')
+    with open(photo, 'rb') as image:
+            response = client.detect_faces(Image={'Bytes': image.read()},Attributes=['ALL'])
+    
+    print('Detected faces for ' + photo)    
+    for faceDetail in response['FaceDetails']:
+        print('The detected face is around ' + str(int(faceDetail['AgeRange']['Low']) + int(faceDetail['AgeRange']['High']) / 2 ))
+        age = str(int(faceDetail['AgeRange']['Low']) + int(faceDetail['AgeRange']['High']) / 2 )
+        print("gender: " + str(faceDetail['Gender']['Value']) + " with " + str(faceDetail['Gender']['Confidence']) + "%" )
+        gender = str(faceDetail['Gender']['Value'])
+        print("smile: " + str(faceDetail['Smile']['Value']) + " with " + str(faceDetail['Smile']['Confidence']) + "%" )
+        smile = str(faceDetail['Smile']['Value'])
+        #print(json.dumps(faceDetail, indent=4, sort_keys=True)) ##### to print the whole list    
+    full = "smile: " + smile + ", age~: " + age + ", gender: " + gender
+    return full
 
 def send_info_to_chat_gpt():
     return "soon implemented"
@@ -53,3 +94,4 @@ def render_result():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True)
+
