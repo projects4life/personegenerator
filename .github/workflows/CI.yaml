@@ -4,6 +4,9 @@ on:
   push:
     branches: [ "master","devops","feature/*" ]
 
+env:
+  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
 jobs:
   CI:
     runs-on: ubuntu-latest
@@ -31,6 +34,16 @@ jobs:
         # Creating images directory in order for the test to pass
         mkdir images 
         pytest
+
+    - name: Slack Notification
+      uses: act10ns/slack@v2.0.0
+      # send message even if the ci fails
+      if: always()
+      with:
+        status: ${{ job.status }}
+        steps: ${{ toJson(steps) }}
+
+
 
 
 
