@@ -24,10 +24,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-
+    
     - name: Unit Test With pytest
       id: unit_test
       run: | 
+        # Creating images directory in order for the test to pass
+        mkdir images 
         pytest
 
 
