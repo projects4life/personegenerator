@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from flask import Flask
+from flask import Flask, render_template
 import requests
 import boto3
 import json
@@ -10,8 +10,7 @@ app = Flask(__name__)
 # Index page
 @app.route('/', methods=['GET'])
 def index():
-    print(get_image_info_from_aws(get_random_image()))
-    return 'soon be implemented'
+    return render_template('index.html')
 
 
 def get_random_image():
