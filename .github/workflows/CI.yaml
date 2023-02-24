@@ -24,6 +24,7 @@ jobs:
       id: aws_configure
       with:
         role-to-assume: arn:aws:iam::405854541726:role/githubActions-role
+        role-session-name: samplerolesession
         aws-region: us-east-2
 
     - name: Set up Python ${{ matrix.python-version }}
