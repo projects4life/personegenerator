@@ -7,6 +7,10 @@ on:
 env:
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read  # This is required for actions/checkout
+
 jobs:
   CI:
     runs-on: ubuntu-latest
@@ -23,7 +27,7 @@ jobs:
       uses: aws-actions/configure-aws-credentials@v1
       id: aws_configure
       with:
-        role-to-assume: arn:aws:iam::405854541726:role/githubActions-role
+        role-to-assume: arn:aws:iam::405854541726:role/github-actions-role
         role-session-name: samplerolesession
         aws-region: us-east-2
 
