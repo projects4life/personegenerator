@@ -1,5 +1,5 @@
 import pytest
-from app import get_random_image 
+from app import * 
 import os
 
 # test for the get_random_image function
