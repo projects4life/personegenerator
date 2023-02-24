@@ -13,4 +13,6 @@ def test_get_random_image():
     data = f.read()
     assert data[:2] == b"\xff\xd8"  # Check the first two bytes of the file for the JPEG magic number
 
-
+def test_aws():
+   result=get_image_info_from_aws("photo.jpg")
+   assert result 
