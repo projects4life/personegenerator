@@ -29,7 +29,7 @@ def get_random_image():
         None.
 
     Returns:
-        None.
+        File Path to The Image.
     """
     # Sending a request
     url = "https://this-person-does-not-exist.com/en"
@@ -89,10 +89,6 @@ def get_image_info_from_aws(photo):
     image_data["smile"]     = smile
     return image_data
 
-# Data about person is a dict:
-# {
-#age: "", gender: , smileing
-#}
 def send_info_to_chat_gpt(data_about_person):
     openai.api_key = os.getenv("OPENAI_API_KEY")
     is_smiling = "smiling" if data_about_person["smile"] == "True" else "not smiling"
