@@ -10,8 +10,7 @@ app = Flask(__name__)
 # Index page
 @app.route('/', methods=['GET'])
 def index():
-    photo=get_random_image()
-    description=get_image_info_from_aws(photo)
+    print(get_image_info_from_aws(get_random_image()))
     return 'soon be implemented'
 
 
@@ -68,6 +67,7 @@ def get_image_info_from_aws(photo):
     smile: False with 0.0009966576413214808%
     'smile: False, age~: 35.0, gender: Male'
     '''
+    image_data={}
     client=boto3.client('rekognition')
     with open(photo, 'rb') as image:
             response = client.detect_faces(Image={'Bytes': image.read()},Attributes=['ALL'])
@@ -80,9 +80,12 @@ def get_image_info_from_aws(photo):
         gender = str(faceDetail['Gender']['Value'])
         print("smile: " + str(faceDetail['Smile']['Value']) + " with " + str(faceDetail['Smile']['Confidence']) + "%" )
         smile = str(faceDetail['Smile']['Value'])
-        #print(json.dumps(faceDetail, indent=4, sort_keys=True)) ##### to print the whole list    
-    full = "smile: " + smile + ", age~: " + age + ", gender: " + gender
-    return full
+        #print(json.dumps(faceDetail, indent=4, sort_keys=True)) ##### to print the whole list
+    
+    image_data["age"]       = age
+    image_data["gender"]    = gender
+    image_data["smile"]     = smile
+    return image_data
 
 def send_info_to_chat_gpt():
     return "soon implemented"

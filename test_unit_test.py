@@ -15,4 +15,6 @@ def test_get_random_image():
 
 def test_aws():
    result=get_image_info_from_aws(get_random_image())
-   assert result 
+   assert  1 < float(result["age"]) < 100 
+   assert result["smile"] in ("True", "False")
+   assert result["gender"] in ("Male", "Female")
