@@ -90,11 +90,23 @@ def get_image_info_from_aws(photo):
     return image_data
 
 def send_info_to_chat_gpt(data_about_person):
+    """
+    This function send info to ChatGpt using the promt below:
+
+    Please generate a background for a {data_about_person['gender']} character who is {data_about_person['age']} years old and is {is_smiling} in a portrait . Please provide information about his name job education, hobbies, personality, hometown, and background. give the response as a json the keys should start at uppercase.
+
+    Then ChatGpt Respones with a json contains random information about the person.
+
+    Args:
+      data_about_person - a dictory contains three keys: age, gender, is_smiling, created by the get_image_info_from_aws function
+
+    Output:
+       The json response as chat gpt recived
+    """
     openai.api_key = os.getenv("OPENAI_API_KEY")
     is_smiling = "smiling" if data_about_person["smile"] == "True" else "not smiling"
     
-    promt_to_chatGpt= f"Please generate a background for a {data_about_person['gender']} character who is {data_about_person['age']} years old and is {is_smiling} in a portrait . Please provide information about his name job education, hobbies, personality, hometown, and background. give the response as a json"
-    # posible to add  give the response as a json
+    promt_to_chatGpt= f"Please generate a background for a {data_about_person['gender']} character who is {data_about_person['age']} years old and is {is_smiling} in a portrait . Please provide information about his name job education, hobbies, personality, hometown, and background. give the response as a json, the keys should start at uppercase"
 
     response = openai.Completion.create(
     model="text-davinci-003",
@@ -105,7 +117,6 @@ def send_info_to_chat_gpt(data_about_person):
     frequency_penalty=0,
     presence_penalty=0
     )
-    # print("hey")
 
     json_repsonse = json.loads(response.choices[0].text)
     print(type(json_repsonse))
