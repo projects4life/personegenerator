@@ -12,6 +12,18 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
+@app.route('/persona', methods=['GET'])
+def persona():
+    # Start loading screen until result is ready
+    # Get random image
+    # Send image to aws
+    # send result to chatgpt
+    # Render all result with custom template(image, jsonBackground)
+    # path = get_random_image()
+    return render_template('persona.html',person_image='static/images/random-face.jpg')
+
+
+
 
 def get_random_image():
     """
