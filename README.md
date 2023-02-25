@@ -1,6 +1,6 @@
 # PersoneGenerator
 
-[![Build Status](https://github.com/actions/checkout/actions/workflows/test.yml/badge.svg)](https://github.com/personaGemerator/personegenerator/actions)
+[![Build Status](https://github.com/personaGemerator/personegenerator/actions/workflows/Ci.yaml/badge.svg)](https://github.com/personaGemerator/personegenerator/actions)
 
 #### PersonGenerator is a web application built with Flask that presents random person picture with random background stories
 
