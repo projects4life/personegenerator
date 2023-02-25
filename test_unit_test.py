@@ -18,3 +18,16 @@ def test_aws():
    assert  1 < float(result["age"]) < 100 
    assert result["smile"] in ("True", "False")
    assert result["gender"] in ("Male", "Female")
+
+def test_chatgpt_generate_logical_response():
+   data = send_info_to_chat_gpt(get_image_info_from_aws(get_random_image()))
+
+   # assert that all keys are in the dictionary
+   assert 'Name' in data.keys()
+   assert 'Job' in data.keys()
+   assert 'Education' in data.keys()
+   assert 'Hobbies' in data.keys()
+   assert 'Personality' in data.keys()
+   assert 'Hometown' in data.keys()
+   assert 'Background' in data.keys()
+
