@@ -12,13 +12,15 @@
 - View generated information: The generated person information is displayed on the application for the user to view.
 
 
-```sh
-
-```
-
-
 # credits
-PersonGenerator was created by [Dvir Pashut] and [Elior Estring].
+PersonGenerator was created by [Dvir Pashut] and [Elior Estring] (who did most of the job).
+
+
+# recources
+
+[openai]
+[this-person-does-not-exist]
+[aws rekognition]
 
 **Free Software, Hell Yeah!**
 
@@ -27,4 +29,6 @@ PersonGenerator was created by [Dvir Pashut] and [Elior Estring].
 
 [Dvir Pashut]: <https://github.com/dvir-pashut>
 [Elior Estring]:<https://github.com/elior7557>
-
+[openai]:<https://openai.com/>
+[this-person-does-not-exist]:<https://this-person-does-not-exist.com/en>
+[aws rekognition]:<https://docs.aws.amazon.com/rekognition/latest/dg/what-is.html>
