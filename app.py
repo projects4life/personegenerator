@@ -117,11 +117,8 @@ def send_info_to_chat_gpt(data_about_person):
     frequency_penalty=0,
     presence_penalty=0
     )
-
+    
     json_repsonse = json.loads(response.choices[0].text)
-    print(type(json_repsonse))
-    print(json_repsonse)
-
     return json_repsonse
     
 
