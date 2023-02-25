@@ -18,9 +18,9 @@ PersonGenerator was created by [Dvir Pashut] and [Elior Estring] (who did most o
 
 # recources
 
-[openai]
-[this-person-does-not-exist]
-[aws rekognition]
+[openai] <br>
+[this-person-does-not-exist] <br>
+[aws rekognition] <br>
 
 **Free Software, Hell Yeah!**
 
