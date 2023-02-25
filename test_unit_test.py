@@ -4,8 +4,7 @@ import os
 
 # test for the get_random_image function
 def test_get_random_image():
- get_random_image() 
- expected_path = "images/random-face.jpg"
+ expected_path = get_random_image() 
  assert os.path.exists(expected_path)
  # Check that the saved file is a JPEG image
 
