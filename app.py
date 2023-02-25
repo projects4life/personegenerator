@@ -130,7 +130,5 @@ def render_result():
 
 
 if __name__ == '__main__':
-    # send_info_to_chat_gpt(get_image_info_from_aws("images/random-face.jpg"))
-    get_random_image()
     app.run(host='0.0.0.0',debug=True)
 
