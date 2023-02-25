@@ -93,7 +93,7 @@ def send_info_to_chat_gpt(data_about_person):
     openai.api_key = os.getenv("OPENAI_API_KEY")
     is_smiling = "smiling" if data_about_person["smile"] == "True" else "not smiling"
     
-    promt_to_chatGpt= f"Please generate a background for a {data_about_person['gender']} character who is {data_about_person['age']} years old and is {is_smiling} in a portrait . Please provide information about his name job education, hobbies, personality, hometown, and background. posible to add  give the response as a json"
+    promt_to_chatGpt= f"Please generate a background for a {data_about_person['gender']} character who is {data_about_person['age']} years old and is {is_smiling} in a portrait . Please provide information about his name job education, hobbies, personality, hometown, and background. give the response as a json"
     # posible to add  give the response as a json
 
     response = openai.Completion.create(
@@ -106,8 +106,12 @@ def send_info_to_chat_gpt(data_about_person):
     presence_penalty=0
     )
     # print("hey")
-    print(response.choices[0].text)
-    return response.choices[0].text
+
+    json_repsonse = json.loads(response.choices[0].text)
+    print(type(json_repsonse))
+    print(json_repsonse)
+
+    return json_repsonse
     
 
 def render_result():
