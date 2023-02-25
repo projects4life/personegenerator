@@ -6,6 +6,8 @@ import json
 from bs4 import BeautifulSoup
 import os
 import openai
+import uuid
+
 
 app = Flask(__name__)
 
@@ -14,7 +16,6 @@ app = Flask(__name__)
 def index():
     print(get_image_info_from_aws(get_random_image()))
     return 'soon be implemented'
-
 
 def get_random_image():
     """
@@ -40,7 +41,8 @@ def get_random_image():
     random_image_url=f"https://this-person-does-not-exist.com{img['src']}"
     # saving it into a file
     image = requests.get(random_image_url)
-    filename = "images/random-face.jpg"
+    # filename = "static/images/random-face.jpg"
+    filename = f"static/images/random-face-{str(uuid.uuid4())}.jpg"
     with open(filename, "wb") as file:
         file.write(image.content)
     return filename
@@ -128,6 +130,7 @@ def render_result():
 
 
 if __name__ == '__main__':
-    send_info_to_chat_gpt(get_image_info_from_aws("images/random-face.jpg"))
+    # send_info_to_chat_gpt(get_image_info_from_aws("images/random-face.jpg"))
+    get_random_image()
     app.run(host='0.0.0.0',debug=True)
 
