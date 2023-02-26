@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from flask import Flask
+from flask import Flask, render_template
 import requests
 import boto3
 import json
@@ -14,8 +14,22 @@ app = Flask(__name__)
 # Index page
 @app.route('/', methods=['GET'])
 def index():
-    print(get_image_info_from_aws(get_random_image()))
-    return 'soon be implemented'
+    return render_template('index.html')
+
+@app.route('/persona', methods=['GET'])
+def persona():
+    # Start loading screen until result is ready
+    # Get random image
+    image_file = get_random_image()
+    image_data= get_image_info_from_aws(image_file)
+    chat_gpt = send_info_to_chat_gpt(image_data)
+    # Send image to aws
+    # send result to chatgpt
+    # Render all result with custom template(image, jsonBackground)
+    # path = get_random_image()
+    return render_template('persona.html',person_image=image_file,image_data=chat_gpt)
+
+
 
 def get_random_image():
     """
