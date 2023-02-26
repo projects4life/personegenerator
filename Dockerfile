@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY requirements.txt . 
 
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt awscli==1.27.79
 
 COPY templates/ ./templates
 
