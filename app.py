@@ -20,11 +20,14 @@ def index():
 def persona():
     # Start loading screen until result is ready
     # Get random image
+    image_file = get_random_image()
+    image_data= get_image_info_from_aws(image_file)
+    chat_gpt = send_info_to_chat_gpt(image_data)
     # Send image to aws
     # send result to chatgpt
     # Render all result with custom template(image, jsonBackground)
     # path = get_random_image()
-    return render_template('persona.html',person_image='static/images/random-face.jpg')
+    return render_template('persona.html',person_image=image_file,image_data=chat_gpt)
 
 
 
