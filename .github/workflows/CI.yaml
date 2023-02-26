@@ -46,7 +46,6 @@ jobs:
       id: unit_test
       run: | 
         # Creating images directory in order for the test to pass
-        mkdir images 
         pytest
 
     - name: Slack Notification
