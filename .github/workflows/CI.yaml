@@ -48,6 +48,12 @@ jobs:
         # Creating images directory in order for the test to pass
         pytest
 
+    - name: Build Docker Compose
+      id: Build
+      run: |
+        docker build -t persona:test
+        docker compose -f application/docker-compose.yml up -d
+
     - name: Slack Notification
       uses: act10ns/slack@v2.0.0
       # send message even if the ci fails
@@ -55,6 +61,9 @@ jobs:
       with:
         status: ${{ job.status }}
         steps: ${{ toJson(steps) }}
+
+
+  
 
 
 
