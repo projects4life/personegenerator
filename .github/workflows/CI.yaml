@@ -52,6 +52,7 @@ jobs:
       id: Build
       run: |
         echo ${OPENAI_API_KEY} >> .env
+        docker compose convert
         docker compose up -d
 
     - name: E2E test
