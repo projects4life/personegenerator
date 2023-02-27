@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from flask import Flask, render_template
+import flask
 import requests
 import boto3
 import json
@@ -9,14 +10,82 @@ import openai
 import uuid
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address 
+import flask_login
 
+app = flask.Flask(__name__)
+app.secret_key = 'super secret string'  # Change this!
 
-app = Flask(__name__)
 
 limiter = Limiter(
     get_remote_address,
     app=app
 )
+
+###############################################################login stuff
+login_manager = flask_login.LoginManager()
+login_manager.init_app(app)
+
+users = {'MENI': {'password': 'MAMTERA'}}
+
+class User(flask_login.UserMixin):
+    pass
+
+
+@login_manager.user_loader
+def user_loader(email):
+    if email not in users:
+        return
+
+    user = User()
+    user.id = email
+    return user
+
+
+@login_manager.request_loader
+def request_loader(request):
+    email = request.form.get('email')
+    if email not in users:
+        return
+
+    user = User()
+    user.id = email
+    return user
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if flask.request.method == 'GET':
+        return '''
+               <form action='login' method='POST'>
+                <input type='text' name='email' id='email' placeholder='email'/>
+                <input type='password' name='password' id='password' placeholder='password'/>
+                <input type='submit' name='submit'/>
+               </form>
+               '''
+
+    email = flask.request.form['email']
+    if email in users and flask.request.form['password'] == users[email]['password']:
+        user = User()
+        user.id = email
+        flask_login.login_user(user)
+        return flask.redirect(flask.url_for('protected'))
+    return 'Bad login'
+
+@app.route('/protected')
+@flask_login.login_required
+def protected():
+    return 'Logged in as: ' + flask_login.current_user.id
+
+@app.route('/logout')
+def logout():
+    flask_login.logout_user()
+    return 'Logged out'
+
+@login_manager.unauthorized_handler
+def unauthorized_handler():
+    return flask.redirect(flask.url_for('login'))
+
+
+#####################################################################APP ROUTES
 
 # Index page
 @app.route('/', methods=['GET'])
@@ -24,7 +93,7 @@ def index():
     return render_template('index.html')
 
 @app.route('/persona', methods=['GET'])
-#@limiter.limit("5 per hour")
+@limiter.limit("5 per hour")
 def persona():
     # Start loading screen until result is ready
     # Get random image
@@ -37,7 +106,19 @@ def persona():
     # path = get_random_image()
     return render_template('persona.html',person_image=image_file,image_data=chat_gpt)
 
-
+@app.route('/admin', methods=['GET'])
+@flask_login.login_required
+def admin():
+    # Start loading screen until result is ready
+    # Get random image
+    image_file = get_random_image()
+    image_data= get_image_info_from_aws(image_file)
+    chat_gpt = send_info_to_chat_gpt(image_data)
+    # Send image to aws
+    # send result to chatgpt
+    # Render all result with custom template(image, jsonBackground)
+    # path = get_random_image()
+    return render_template('persona.html',person_image=image_file,image_data=chat_gpt)
 
 def get_random_image():
     """
