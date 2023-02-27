@@ -51,12 +51,13 @@ jobs:
     - name: Build Docker Compose
       id: Build
       run: |
+        echo ${OPENAI_API_KEY} >> .env
         docker compose up -d
 
     - name: E2E test
       id: E2E
       run: |
-        echo ${OPENAI_API_KEY} >> .env
+
         sleep 5
         pytest test_e2e.py
     
