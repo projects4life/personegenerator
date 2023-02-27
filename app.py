@@ -7,9 +7,17 @@ from bs4 import BeautifulSoup
 import os
 import openai
 import uuid
+from flask_limiter import Limiter 
+from flask_limiter.util import get_remote_address 
 
 
 app = Flask(__name__)
+
+limiter = Limiter(
+    get_remote_address,
+    app=app
+)
+
 
 # Index page
 @app.route('/', methods=['GET'])
@@ -17,6 +25,7 @@ def index():
     return render_template('index.html')
 
 @app.route('/persona', methods=['GET'])
+#@limiter.limit("5/houre")
 def persona():
     # Start loading screen until result is ready
     # Get random image
