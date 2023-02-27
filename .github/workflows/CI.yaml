@@ -33,19 +33,16 @@ jobs:
         aws-region: us-east-2
 
     - name: Google Auth
-      if: ${{ github.ref == 'refs/heads/main'}}
       id: auth
       uses: 'google-github-actions/auth@v1'
       with:
         credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
 
     - name: Docker Auth
-      if: ${{ github.ref == 'refs/heads/main'}}
       run: gcloud auth configure-docker europe-docker.pkg.dev
 
     - name: push the image
       id: new-image-published
-      if: ${{ github.ref == 'refs/heads/main'}}
       run: |
         docker build -t europe-docker.pkg.dev/personagenerator-379008/personagenerator:1
         docker push europe-docker.pkg.dev/personagenerator-379008/personagenerator:1
