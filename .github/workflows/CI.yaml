@@ -51,7 +51,6 @@ jobs:
     - name: Build Docker Compose
       id: Build
       run: |
-        docker build -t persona:test
         docker compose up -d
 
     - name: E2E test
