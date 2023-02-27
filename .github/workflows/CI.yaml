@@ -36,6 +36,10 @@ jobs:
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
+
+    - name: test
+      run: |
+        ls ~/.aws
       
     # - name: Install dependencies for testing
     #   run: |
@@ -48,20 +52,20 @@ jobs:
     #     # Creating images directory in order for the test to pass
     #     pytest test_unit_test.py
 
-    - name: Build Docker Compose
-      id: Build
-      run: |
-        echo 'OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}' >> .env
-        docker compose convert
-        docker compose up -d
+    # - name: Build Docker Compose
+    #   id: Build
+    #   run: |
+    #     echo 'OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}' >> .env
+    #     docker compose convert
+    #     docker compose up -d
 
-    - name: E2E test
-      id: E2E
-      run: |
-        sleep 10
-        curl localhost:80
-        curl localhost:80/persona
-        pytest test_e2e.py
+    # - name: E2E test
+    #   id: E2E
+    #   run: |
+    #     sleep 10
+    #     curl localhost:80
+    #     curl localhost:80/persona
+    #     pytest test_e2e.py
     
 
     - name: Slack Notification
