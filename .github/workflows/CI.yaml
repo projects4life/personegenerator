@@ -52,7 +52,13 @@ jobs:
       id: Build
       run: |
         docker build -t persona:test
-        docker compose -f application/docker-compose.yml up -d
+        docker compose up -d
+
+    - name: E2E test
+      id: E2E
+      run: |
+        pytest test_unit_test 
+    
 
     - name: Slack Notification
       uses: act10ns/slack@v2.0.0
