@@ -16,5 +16,5 @@ services:
       - ~/.aws:/root/.aws
     environment:
       # For CI to pass
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
 
