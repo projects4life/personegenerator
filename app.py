@@ -13,7 +13,7 @@ from flask_limiter.util import get_remote_address
 import flask_login
 
 app = flask.Flask(__name__)
-app.secret_key = 'super secret string'  # Change this!
+app.secret_key = '6226bfbe64b9'  # Change this!
 
 
 limiter = Limiter(

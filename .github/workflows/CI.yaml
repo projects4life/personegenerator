@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ "googletest" ]
+    branches: [ "main", "devops", "feature/*" ]
 
 env:
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -32,23 +32,21 @@ jobs:
         role-session-name: samplerolesession
         aws-region: us-east-2
 
-    - name: Google Auth
-      id: auth
-      uses: 'google-github-actions/auth@v1'
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
       with:
-        credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-
-    - name: Docker Auth
-      run: gcloud auth configure-docker europe-docker.pkg.dev
-
-    - name: push the image
-      id: new-image-published
+        python-version: ${{ matrix.python-version }}
+      
+    - name: Install dependencies for testing
       run: |
-        docker build -t europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:0.1 .
-        docker push europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:0.1
-      env:
-        GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS}}
-
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Unit Test With pytest
+      id: unit_test
+      run: | 
+        # Creating images directory in order for the test to pass
+        pytest
 
     - name: Slack Notification
       uses: act10ns/slack@v2.0.0
@@ -57,9 +55,6 @@ jobs:
       with:
         status: ${{ job.status }}
         steps: ${{ toJson(steps) }}
-
-
-
 
 
 
