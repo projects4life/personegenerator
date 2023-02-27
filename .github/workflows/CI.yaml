@@ -44,8 +44,8 @@ jobs:
     - name: push the image
       id: new-image-published
       run: |
-        docker build -t europe-docker.pkg.dev/personagenerator-379008/personagenerator:1 .
-        docker push europe-docker.pkg.dev/personagenerator-379008/personagenerator:1
+        docker build -t europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:0.1 .
+        docker push europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:0.1
       env:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS}}
 
@@ -59,7 +59,7 @@ jobs:
         steps: ${{ toJson(steps) }}
 
 
-        
+
 
 
 
