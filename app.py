@@ -19,6 +19,7 @@ limiter = Limiter(
 )
 
 
+
 # Index page
 @app.route('/', methods=['GET'])
 def index():
