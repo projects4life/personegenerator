@@ -11,6 +11,7 @@ def test_persona_route():
     # parsing the response 
     soup = BeautifulSoup(response.text, "html.parser")
     img = soup.find("img", {"id": "avatar"})
+    print(img)
     assert re.match("static/images/.*", img["src"])
 
 
