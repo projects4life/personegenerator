@@ -54,13 +54,7 @@ def request_loader(request):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if flask.request.method == 'GET':
-        return '''
-               <form action='login' method='POST'>
-                <input type='text' name='email' id='email' placeholder='email'/>
-                <input type='password' name='password' id='password' placeholder='password'/>
-                <input type='submit' name='submit'/>
-               </form>
-               '''
+        return render_template("login.html")
 
     email = flask.request.form['email']
     if email in users and flask.request.form['password'] == users[email]['password']:

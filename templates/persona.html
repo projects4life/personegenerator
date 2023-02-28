@@ -17,11 +17,13 @@
   </head>
   <body>
     <!-- NavBar -->
+    <a href="/">
     <nav class="navbar navbar-light bg-success">
       <div class="container-fluid">
         <span class="navbar-brand h1 m-auto">&#11088;&#11088;&#11088; Persona Generator &#11088;&#11088;&#11088;</span>
       </div>
     </nav>
+    </a>
     <!-- <img src="/static/images/random-face.jgp" alt="" srcset=""> -->
     <!-- Optional JavaScript; choose one of the two! -->
 
@@ -37,6 +39,23 @@
       <div class="data">
         {{ image_data }}
       </div>
+
+
+      <div class="container d-flex justify-content-center align-items-center vh-100">
+        <div class="row">
+          <div class="col">
+            <button class="btn btn-primary fw-bold" type="button" onclick="redirectToPersona()">
+              REFRESH
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <script>
+      function redirectToPersona() {
+        window.location.href = '/persona';
+      }
+      </script>
 
 
   </body>
