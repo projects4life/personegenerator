@@ -208,7 +208,6 @@ def send_info_to_chat_gpt(data_about_person):
     json_repsonse = json.loads(response.choices[0].text)
     return json_repsonse
     
-
 def render_result():
     return "soon implemented" 
 
