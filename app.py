@@ -105,13 +105,13 @@ def persona():
     # path = get_random_image()
     # return render_template('persona.html',person_image=image_file,image_data=chat_gpt)
 
-<<<<<<< HEAD
 
     # image_data={'Name': 'Adam Smith', 'Job': 'Student', 'Education': 'Preschool', 'Hobbies': ['Playing with Toys', 'Drawing', 'Making Music'], 'Personality': 'Energetic and Inquisitive', 'Hometown': 'New York City, USA', 'Background': 'Adam is a 4.5 year old student from New York City. He loves playing with toys, drawing and making music. He is an energetic and inquisitive kid who loves exploring the world around him. He loves spending time with his family, playing outside and learning new things.'}
 
     
     return render_template('persona.html',person_image=image_file,image_data=image_data["Background"],name=image_data['Name'], job=image_data["Job"], education=image_data["Education"], hobbies=image_data["Hobbies"], personality=image_data["Personality"], hometown=image_data["Hometown"])
-=======
+
+    
 @app.route('/admin', methods=['GET'])
 @flask_login.login_required
 def admin():
@@ -125,7 +125,6 @@ def admin():
     # Render all result with custom template(image, jsonBackground)
     # path = get_random_image()
     return render_template('persona.html',person_image=image_file,image_data=chat_gpt)
->>>>>>> main
 
 def get_random_image():
     """
