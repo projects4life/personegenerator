@@ -24,13 +24,21 @@ jobs:
     - uses: actions/checkout@v3
       id: git_clone
 
+    # - name: Configure AWS Credentials
+    #   uses: aws-actions/configure-aws-credentials@v1
+    #   id: aws_configure
+    #   with:
+    #     role-to-assume: arn:aws:iam::405854541726:role/github-actions-role
+    #     role-session-name: samplerolesession
+    #     aws-region: us-east-2
+
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
-      id: aws_configure
       with:
-        role-to-assume: arn:aws:iam::405854541726:role/github-actions-role
-        role-session-name: samplerolesession
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-2
+
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
@@ -52,20 +60,20 @@ jobs:
     #     # Creating images directory in order for the test to pass
     #     pytest test_unit_test.py
 
-    # - name: Build Docker Compose
-    #   id: Build
-    #   run: |
-    #     echo 'OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}' >> .env
-    #     docker compose convert
-    #     docker compose up -d
+    - name: Build Docker Compose
+      id: Build
+      run: |
+        echo 'OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}' >> .env
+        docker compose convert
+        docker compose up -d
 
-    # - name: E2E test
-    #   id: E2E
-    #   run: |
-    #     sleep 10
-    #     curl localhost:80
-    #     curl localhost:80/persona
-    #     pytest test_e2e.py
+    - name: E2E test
+      id: E2E
+      run: |
+        sleep 10
+        curl localhost:80
+        curl localhost:80/persona
+        pytest test_e2e.py
     
 
     - name: Slack Notification
