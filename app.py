@@ -205,8 +205,24 @@ def send_info_to_chat_gpt(data_about_person):
     presence_penalty=0
     )
     
-    json_repsonse = json.loads(response.choices[0].text)
-    return json_repsonse
+
+
+    ##### this is a hotfix for the prod env that will try to get a ajson respone from gebeta
+    ##### if the data recived from gebeta is not valid the try up to $max_attempts times
+    ##### if still faild rais an exeption
+    max_attempts = 5
+    attempts = 0
+    json_response = None
+    while attempts < max_attempts:
+        try:
+            json_response = json.loads(response.choices[0].text)
+            break  # exit the loop if successful
+        except:
+            attempts += 1  # increment attempts count if unsuccessful
+            if attempts == max_attempts:
+                raise  # raise an exception if maximum attempts exceeded
+        
+    return json_response
     
 def render_result():
     return "soon implemented" 
