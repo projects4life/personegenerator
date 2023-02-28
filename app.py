@@ -16,6 +16,9 @@ app = flask.Flask(__name__)
 app.secret_key = '6226bfbe64b9'  # Change this!
 
 
+username = os.environ.get("APP_USER")
+password = os.environ.get("APP_PASSWORD")
+
 limiter = Limiter(
     get_remote_address,
     app=app
@@ -25,7 +28,7 @@ limiter = Limiter(
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 
-users = {'MENI': {'password': 'MAMTERA'}}
+users = {username: {'password': password}}
 
 class User(flask_login.UserMixin):
     pass
@@ -77,6 +80,7 @@ def logout():
 @login_manager.unauthorized_handler
 def unauthorized_handler():
     return flask.redirect(flask.url_for('login')) , 302
+
 
 
 #####################################################################APP ROUTES
