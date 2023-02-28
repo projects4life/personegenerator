@@ -65,7 +65,13 @@ jobs:
         sleep 10
         curl localhost:80/persona
         pytest test_e2e.py
-    
+
+    - name: Main Branch E2E
+      id: Main-Branch-E2E
+      if: ${{ github.ref == 'refs/heads/main' }}
+      run: |
+        pytest test_e2e_prod
+
     - name: Slack Notification
       uses: act10ns/slack@v2.0.0
       # send message even if the ci fails
