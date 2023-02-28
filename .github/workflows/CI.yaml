@@ -82,7 +82,6 @@ jobs:
       id: E2E
       run: |
         sleep 10
-        curl localhost:80
         curl localhost:80/persona
         pytest test_e2e.py
     
