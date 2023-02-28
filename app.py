@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from flask import Flask, render_template
+import flask
 import requests
 import boto3
 import json
@@ -7,9 +8,83 @@ from bs4 import BeautifulSoup
 import os
 import openai
 import uuid
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address 
+import flask_login
+
+app = flask.Flask(__name__)
+app.secret_key = '6226bfbe64b9'  # Change this!
 
 
-app = Flask(__name__)
+username = os.environ.get("APP_USER")
+password = os.environ.get("APP_PASSWORD")
+
+limiter = Limiter(
+    get_remote_address,
+    app=app
+)
+
+###############################################################login stuff
+login_manager = flask_login.LoginManager()
+login_manager.init_app(app)
+
+users = {username: {'password': password}}
+
+class User(flask_login.UserMixin):
+    pass
+
+
+@login_manager.user_loader
+def user_loader(email):
+    if email not in users:
+        return
+
+    user = User()
+    user.id = email
+    return user
+
+
+
+@login_manager.request_loader
+def request_loader(request):
+    email = request.form.get('email')
+    if email not in users:
+        return
+
+    user = User()
+    user.id = email
+    return user
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if flask.request.method == 'GET':
+        return render_template("login.html")
+
+    email = flask.request.form['email']
+    if email in users and flask.request.form['password'] == users[email]['password']:
+        user = User()
+        user.id = email
+        flask_login.login_user(user)
+        return flask.redirect(flask.url_for('protected'))
+    return 'Bad login', 401
+
+@app.route('/protected')
+@flask_login.login_required
+def protected():
+    return 'Logged in as: ' + flask_login.current_user.id
+
+@app.route('/logout')
+def logout():
+    flask_login.logout_user()
+    return 'Logged out'
+
+@login_manager.unauthorized_handler
+def unauthorized_handler():
+    return flask.redirect(flask.url_for('login')) , 302
+
+
+
+#####################################################################APP ROUTES
 
 # Index page
 @app.route('/', methods=['GET'])
@@ -17,6 +92,7 @@ def index():
     return render_template('index.html')
 
 @app.route('/persona', methods=['GET'])
+@limiter.limit("5 per hour")
 def persona():
     # Start loading screen until result is ready
     # Get random image
@@ -29,11 +105,27 @@ def persona():
     # path = get_random_image()
     # return render_template('persona.html',person_image=image_file,image_data=chat_gpt)
 
+<<<<<<< HEAD
 
     # image_data={'Name': 'Adam Smith', 'Job': 'Student', 'Education': 'Preschool', 'Hobbies': ['Playing with Toys', 'Drawing', 'Making Music'], 'Personality': 'Energetic and Inquisitive', 'Hometown': 'New York City, USA', 'Background': 'Adam is a 4.5 year old student from New York City. He loves playing with toys, drawing and making music. He is an energetic and inquisitive kid who loves exploring the world around him. He loves spending time with his family, playing outside and learning new things.'}
 
     
     return render_template('persona.html',person_image=image_file,image_data=image_data["Background"],name=image_data['Name'], job=image_data["Job"], education=image_data["Education"], hobbies=image_data["Hobbies"], personality=image_data["Personality"], hometown=image_data["Hometown"])
+=======
+@app.route('/admin', methods=['GET'])
+@flask_login.login_required
+def admin():
+    # Start loading screen until result is ready
+    # Get random image
+    image_file = get_random_image()
+    image_data= get_image_info_from_aws(image_file)
+    chat_gpt = send_info_to_chat_gpt(image_data)
+    # Send image to aws
+    # send result to chatgpt
+    # Render all result with custom template(image, jsonBackground)
+    # path = get_random_image()
+    return render_template('persona.html',person_image=image_file,image_data=chat_gpt)
+>>>>>>> main
 
 def get_random_image():
     """
