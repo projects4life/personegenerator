@@ -71,7 +71,7 @@ jobs:
       id: Main-Branch-E2E
       if: ${{ github.ref == 'refs/heads/main' }} || contains(${{ github.event.head_commit.message }}, '#FULL-E2E')    
       run: |
-        pytest tets_prod_e2e.py
+        pytest test_prod_e2e.py
 
     - name: Slack Notification
       uses: act10ns/slack@v2.0.0
