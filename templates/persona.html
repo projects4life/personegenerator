@@ -15,15 +15,18 @@
 
     <title>Persona Generator</title>
   </head>
-  <body>
+  <body class="bg-light p-2 text-dark bg-opacity-25">
     <!-- NavBar -->
-    <a href="/">
-    <nav class="navbar navbar-light bg-success">
+   <nav class="navbar navbar-light bg-light">
       <div class="container-fluid">
-        <span class="navbar-brand h1 m-auto">&#11088;&#11088;&#11088; Persona Generator &#11088;&#11088;&#11088;</span>
+        <span class="navbar-brand h1 m-auto"
+          >&#11088;&#11088;&#11088; Persona Generator
+          &#11088;&#11088;&#11088;</span
+        >
       </div>
     </nav>
-    </a>
+ 
+
     <!-- <img src="/static/images/random-face.jgp" alt="" srcset=""> -->
     <!-- Optional JavaScript; choose one of the two! -->
 
@@ -33,30 +36,48 @@
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
     ></script>
-    <img src="{{ person_image }}" id="avatar" alt="Person_image">
-    <!-- <img src="/static/images/random-face.jpg" alt="" srcset=""> -->
 
-      <div class="data">
-        {{ image_data }}
-      </div>
+    <div class="container mt-5">
+      <div class="row align-items-center">
 
-
-      <div class="container d-flex justify-content-center align-items-center vh-100">
-        <div class="row">
-          <div class="col">
-            <button class="btn btn-primary fw-bold" type="button" onclick="redirectToPersona()">
-              REFRESH
-            </button>
-          </div>
+        <div class="col">
+          <img src="{{ person_image }}" id="avatar" class="img-fluid" alt="Person_image" />
+          <table class="table">
+            <tbody>
+              <tr class="table-primary">
+                <th scope="row">Name</th>
+                <td>{{ name }}</td>
+              </tr>
+              <tr class="table-secondary">
+                <th scope="row">Job</th>
+                <td>{{ job }}</td>
+              </tr>
+              <tr class="table-success">
+                <th scope="row">Education</th>
+                <td>{{ education }}</td>
+              </tr>
+              <tr class="table-danger">
+                <th scope="row">Hobbies</th>
+                <td>{% for hobbie in hobbies %}{{ hobbie }}{% endfor %}</td>
+              </tr>
+              <tr class="table-warning">
+                <th scope="row">Personality</th>
+                <td>{{  personality }}</td>
+              </tr>
+              <tr class="table-info">
+                <th scope="row">Hometown</th>
+                <td>{{ hometown }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+
+        <div class="col data">
+          {{ image_data }}
+        </div>
+
+        
       </div>
-      
-      <script>
-      function redirectToPersona() {
-        window.location.href = '/persona';
-      }
-      </script>
-
-
+    </div>
   </body>
 </html>

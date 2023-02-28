@@ -3,7 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import re
 
-ENDPOINT = "http://localhost:80"
+ENDPOINT = "http://localhost:5000"
 
 # Test the ability of the application to generate an image and information and display it on the persona route
 def test_persona_route():
