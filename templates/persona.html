@@ -27,7 +27,6 @@
     </nav>
  
 
-
     <!-- <img src="/static/images/random-face.jgp" alt="" srcset=""> -->
     <!-- Optional JavaScript; choose one of the two! -->
 
@@ -59,11 +58,11 @@
               </tr>
               <tr class="table-danger">
                 <th scope="row">Hobbies</th>
-                <td>{{ hobbies }}</td>
+                <td>{% for hobbie in hobbies %}{{ hobbie }}{% endfor %}</td>
               </tr>
               <tr class="table-warning">
                 <th scope="row">Personality</th>
-                <td>{{ personality }}</td>
+                <td>{{  personality }}</td>
               </tr>
               <tr class="table-info">
                 <th scope="row">Hometown</th>
@@ -71,7 +70,6 @@
               </tr>
             </tbody>
           </table>
-          <!-- <img src="/static/images/random-face.jpg" alt="" srcset=""> -->
         </div>
 
         <div class="col data">
