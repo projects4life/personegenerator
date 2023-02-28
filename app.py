@@ -20,18 +20,20 @@ def index():
 def persona():
     # Start loading screen until result is ready
     # Get random image
-    # image_file = get_random_image()
-    # image_data= get_image_info_from_aws(image_file)
-    # chat_gpt = send_info_to_chat_gpt(image_data)
+    image_file = get_random_image()
+    image_data_aws= get_image_info_from_aws(image_file)
+    image_data = send_info_to_chat_gpt(image_data_aws)
     # Send image to aws
     # send result to chatgpt
     # Render all result with custom template(image, jsonBackground)
     # path = get_random_image()
     # return render_template('persona.html',person_image=image_file,image_data=chat_gpt)
-    sample_data={'Name': 'Adam Smith', 'Job': 'Student', 'Education': 'Preschool', 'Hobbies': ['Playing with Toys', 'Drawing', 'Making Music'], 'Personality': 'Energetic and Inquisitive', 'Hometown': 'New York City, USA', 'Background': 'Adam is a 4.5 year old student from New York City. He loves playing with toys, drawing and making music. He is an energetic and inquisitive kid who loves exploring the world around him. He loves spending time with his family, playing outside and learning new things.'}
-    return render_template('persona.html',person_image="/static/images/random-face-2a677ef9-bb36-4e7a-b2dd-1b41067c8279.jpg",image_data=sample_data)
 
 
+    # image_data={'Name': 'Adam Smith', 'Job': 'Student', 'Education': 'Preschool', 'Hobbies': ['Playing with Toys', 'Drawing', 'Making Music'], 'Personality': 'Energetic and Inquisitive', 'Hometown': 'New York City, USA', 'Background': 'Adam is a 4.5 year old student from New York City. He loves playing with toys, drawing and making music. He is an energetic and inquisitive kid who loves exploring the world around him. He loves spending time with his family, playing outside and learning new things.'}
+
+    
+    return render_template('persona.html',person_image=image_file,image_data=image_data["Background"],name=image_data['Name'], job=image_data["Job"], education=image_data["Education"], hobbies=image_data["Hobbies"], personality=image_data["Personality"], hometown=image_data["Hometown"])
 
 def get_random_image():
     """
