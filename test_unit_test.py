@@ -1,5 +1,5 @@
 import pytest
-from app import * 
+from blueprints.persona.persona import * 
 import os
 
 # test for the get_random_image function

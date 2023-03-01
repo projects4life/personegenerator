@@ -1,13 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 import flask_login
 import os
-# import flask
 
-# import app instance of application
-# from app import app
-
-
-# ## Env
+#Env
 username = os.environ.get("APP_USER")
 password = os.environ.get("APP_PASSWORD")
 
@@ -76,8 +71,5 @@ def logout():
 @login_manager.unauthorized_handler
 def unauthorized_handler():
     return redirect(url_for('login_page.login')) , 302
-
-
-#####################################################################APP ROUTES
 
 
