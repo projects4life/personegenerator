@@ -107,7 +107,7 @@ jobs:
     - name: Slack Notification
       uses: act10ns/slack@v2.0.0
       # send message even if the ci fails
-      if: always() || !(contains(${{ github.event.head_commit.message }}, '#MUTE'))
+      if: always() && !(contains(${{ github.event.head_commit.message }}, '#MUTE'))
       with:
         status: ${{ job.status }}
         steps: ${{ toJson(steps) }}
