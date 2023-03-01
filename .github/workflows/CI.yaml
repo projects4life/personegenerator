@@ -95,7 +95,7 @@ jobs:
       run: |
         docker tag personagetnerator europe-docker.pkg.dev/personagenerator-379008/personagenerator
         #docker push europe-docker.pkg.dev/personagenerator-379008/personagenerator:$(git describe --tags)
-        docker push europe-docker.pkg.dev/personagenerator-379008/personagenerator   
+        docker push europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:latest 
                      
     - name: Slack Notification
       uses: act10ns/slack@v2.0.0
