@@ -78,7 +78,7 @@ jobs:
 
     - name: Main Branch E2E
       id: Main-Branch-E2E
-      if: ${{ github.ref == 'refs/heads/main' || contains(${{ github.event.head_commit.message }}, '#FULL-E2E')}} 
+      if: ${{ github.ref == 'refs/heads/main' || contains( ${{ github.event.head_commit.message }} , '#FULL-E2E') }} 
       run: |
         echo 'test'
         # pytest test_prod_e2e.py
