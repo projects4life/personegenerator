@@ -29,7 +29,7 @@ jobs:
     - uses: actions/checkout@v3
       id: git_clone
 
-    - id: 'auth with gcp'
+    - id: 'auth-with-gcp'
       name: 'Authenticate to Google Cloud'
       uses: 'google-github-actions/auth@v1'
       with:
