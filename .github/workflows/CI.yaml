@@ -29,12 +29,19 @@ jobs:
     - uses: actions/checkout@v3
       id: git_clone
 
-    - id: 'auth-with-gcp'
+    - id: 'gcp-auth'
       name: 'Authenticate to Google Cloud'
       uses: 'google-github-actions/auth@v1'
       with:
-        workload_identity_provider: 'projects/320480020538/locations/global/workloadIdentityPools/github-pool/providers/my-provider'
-        service_account: 'github-new@personagenerator-379008.iam.gserviceaccount.com'
+        workload_identity_provider: 'projects/320480020538/locations/global/workloadIdentityPools/gh-pool/providers/gh-provider'
+        service_account: 'gh-service-account@personagenerator-379008.iam.gserviceaccount.com'
+
+    - uses: 'docker/login-action@v1'
+      with:
+        registry: 'europe-docker.pkg.dev' # or REGION-docker.pkg.dev
+        username: 'oauth2accesstoken'
+        password: '${{ steps.gcp-auth.outputs.access_token }}'
+
 
 
     # - name: Configure AWS Credentials
