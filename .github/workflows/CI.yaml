@@ -3,9 +3,7 @@ name: CI
 on:
   push:
     branches: [ "main", "devops", "feature/*" ]
-    # branches: [ "main", "feature/*" ]
     
-
 env:
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -14,7 +12,6 @@ env:
   AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
   APP_USER: ${{ secrets.APP_PASSWORD }}
   APP_PASSWORD: ${{ secrets.APP_USER }}
-
 
 permissions:
   id-token: write # This is required for requesting the JWT
@@ -82,12 +79,11 @@ jobs:
       run: |
         pytest test_prod_e2e.py
 
-
-## Calculate Version only if on main
+    # Calculate Version only if on main
     - name: Bump version and push tag
       id: tag
       # Will be changed to master soon
-      # if: ${{ github.ref == 'refs/heads/main' }}
+      if: ${{ github.ref == 'refs/heads/main' }}
       uses: anothrNick/github-tag-action@1.61.0
       env:
         GITHUB_TOKEN: ${{ secrets.API_GITHUB_TOKEN }}
