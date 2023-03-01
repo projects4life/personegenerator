@@ -65,7 +65,7 @@ def login():
         user = User()
         user.id = email
         flask_login.login_user(user)
-        return flask.redirect(flask.url_for('protected'))
+        return flask.redirect(flask.url_for('admin'))
     return 'Bad login', 401
 
 @app.route('/protected')
@@ -81,7 +81,6 @@ def logout():
 @login_manager.unauthorized_handler
 def unauthorized_handler():
     return flask.redirect(flask.url_for('login')) , 302
-
 
 
 #####################################################################APP ROUTES
