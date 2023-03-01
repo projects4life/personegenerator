@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 from flask import Flask, render_template
-import flask
 import requests
 import boto3
 import json
@@ -11,76 +10,84 @@ import uuid
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address 
 import flask_login
+from blueprints.login.login import login_page
 
-app = flask.Flask(__name__)
+
+
+
+app = Flask(__name__)
 app.secret_key = '6226bfbe64b9'  # Change this!
 
+#login
+app.register_blueprint(login_page)
 
-username = os.environ.get("APP_USER")
-password = os.environ.get("APP_PASSWORD")
+
+
+# username = os.environ.get("APP_USER")
+# password = os.environ.get("APP_PASSWORD")
 
 limiter = Limiter(
     get_remote_address,
     app=app
 )
 
-###############################################################login stuff
-login_manager = flask_login.LoginManager()
-login_manager.init_app(app)
+# ###############################################################login stuff
+# login_manager = flask_login.LoginManager()
+# login_manager.init_app(app)
 
-users = {username: {'password': password}}
+# users = {username: {'password': password}}
 
-class User(flask_login.UserMixin):
-    pass
+# class User(flask_login.UserMixin):
+#     pass
 
-@login_manager.user_loader
-def user_loader(email):
-    if email not in users:
-        return
+# @login_manager.user_loader
+# def user_loader(email):
+#     if email not in users:
+#         return
 
-    user = User()
-    user.id = email
-    return user
+#     user = User()
+#     user.id = email
+#     return user
 
-@login_manager.request_loader
-def request_loader(request):
-    email = request.form.get('email')
-    if email not in users:
-        return
+# @login_manager.request_loader
+# def request_loader(request):
+#     email = request.form.get('email')
+#     if email not in users:
+#         return
 
-    user = User()
-    user.id = email
-    return user
+#     user = User()
+#     user.id = email
+#     return user
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if flask.request.method == 'GET':
-        return render_template("login.html")
+# @app.route('/login', methods=['GET', 'POST'])
+# def login():
+#     if flask.request.method == 'GET':
+#         return render_template("login.html")
 
-    email = flask.request.form['email']
-    if email in users and flask.request.form['password'] == users[email]['password']:
-        user = User()
-        user.id = email
-        flask_login.login_user(user)
-        return flask.redirect(flask.url_for('admin'))
-    return 'Bad login', 401
+#     email = flask.request.form['email']
+#     if email in users and flask.request.form['password'] == users[email]['password']:
+#         user = User()
+#         user.id = email
+#         flask_login.login_user(user)
+#         return flask.redirect(flask.url_for('admin'))
+#     return 'Bad login', 401
 
-@app.route('/protected')
-@flask_login.login_required
-def protected():
-    return 'Logged in as: ' + flask_login.current_user.id
+# @app.route('/protected')
+# @flask_login.login_required
+# def protected():
+#     return 'Logged in as: ' + flask_login.current_user.id
 
-@app.route('/logout')
-def logout():
-    flask_login.logout_user()
-    return 'Logged out'
+# @app.route('/logout')
+# def logout():
+#     flask_login.logout_user()
+#     return 'Logged out'
 
-@login_manager.unauthorized_handler
-def unauthorized_handler():
-    return flask.redirect(flask.url_for('login')) , 302
+# @login_manager.unauthorized_handler
+# def unauthorized_handler():
+#     return flask.redirect(flask.url_for('login')) , 302
 
 
-#####################################################################APP ROUTES
+# #####################################################################APP ROUTES
 
 # Index page
 @app.route('/', methods=['GET'])
@@ -88,7 +95,7 @@ def index():
     return render_template('index.html')
 
 @app.route('/persona', methods=['GET'])
-@limiter.limit("5 per hour")
+@limiter.limit("1 per hour")
 def persona():
     return render_persona()
 

@@ -9,7 +9,7 @@ username = os.environ.get("APP_USER")
 password = os.environ.get("APP_PASSWORD")
 
 ENDPOINT = "http://localhost:5000"
-LIMIT = 5
+LIMIT = 1
 
 def test_limitter():
     for i in range(LIMIT):
