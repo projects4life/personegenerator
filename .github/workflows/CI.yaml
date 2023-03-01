@@ -36,12 +36,6 @@ jobs:
         workload_identity_provider: 'projects/320480020538/locations/global/workloadIdentityPools/gh-pool/providers/gh-provider'
         service_account: 'gh-service-account@personagenerator-379008.iam.gserviceaccount.com'
 
-    # - id: 'gcloud'
-    #   name: 'gcloud'
-    #   run: |-
-    #     gcloud auth login --brief --cred-file="${{ steps.auth.outputs.credentials_file_path }}"
-
-
     - name: Docker Auth
       run: gcloud auth configure-docker europe-docker.pkg.dev
 
@@ -90,10 +84,24 @@ jobs:
     #   run: |
     #     pytest test_prod_e2e.py
 
+
+## Calculate Version only if on main
+    - name: Bump version and push tag
+      id: tag
+      # Will be changed to master soon
+      # if: ${{ github.ref == 'refs/heads/main' }}
+      uses: anothrNick/github-tag-action@1.61.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.API_GITHUB_TOKEN }}
+        WITH_V: false
+        DEFAULT_BUMP: patch
+        INITIAL_VERSION: 0.0.0
+        DEFAULT_BRANCH: devops
+
     - name: push the image
       id: new-image-published
       run: |
-        docker tag personagetnerator europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:latest 
+        docker tag personagetnerator europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:${{ steps.id.outputs.new_version }}
         #docker push europe-docker.pkg.dev/personagenerator-379008/personagenerator:$(git describe --tags)
         docker push europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:latest 
                      
