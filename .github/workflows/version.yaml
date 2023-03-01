@@ -1,12 +1,15 @@
-name: CI
+name: test
 
 on:
   push:
     branches: ["devops"]
 
 jobs:
+
   versionCalc:
     runs-on: ubuntu-latest
+    outputs:
+      new_tag: ${{ steps.tag.outputs.new_tag }}
 
     steps:
     - uses: actions/checkout@v3
@@ -28,3 +31,14 @@ jobs:
       run: |
         echo ${{ steps.tag.outputs.new_version }}
 
+  testOutPut:
+      needs: versionCalc
+      runs-on: ubuntu-latest
+      steps:
+        
+      - name: Print output
+        id: gitops-action
+        run: |
+          new_tag=${{needs.versionCalc.outputs.new_tag}}
+          echo $new_tag
+      
