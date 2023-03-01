@@ -29,13 +29,18 @@ jobs:
     - uses: actions/checkout@v3
       id: git_clone
 
-    - id: 'gcp-auth'
+    - id: 'auth'
       name: 'Authenticate to Google Cloud'
       uses: 'google-github-actions/auth@v1'
       with:
-        token_format: 'access_token'
+        create_credentials_file: 'true'
         workload_identity_provider: 'projects/320480020538/locations/global/workloadIdentityPools/gh-pool/providers/gh-provider'
         service_account: 'gh-service-account@personagenerator-379008.iam.gserviceaccount.com'
+
+    - id: 'gcloud'
+      name: 'gcloud'
+      run: |-
+        gcloud auth login --brief --cred-file="${{ steps.auth.outputs.credentials_file_path }}"
 
     - uses: 'docker/login-action@v1'
       with:
