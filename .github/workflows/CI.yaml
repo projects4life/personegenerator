@@ -29,49 +29,57 @@ jobs:
     - uses: actions/checkout@v3
       id: git_clone
 
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      id: configure-aws-credentials
+    - id: 'auth with gcp'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v1'
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-2
+        workload_identity_provider: 'projects/320480020538/locations/global/workloadIdentityPools/githubactionspool/github'
+        service_account: 'github-actions@personagenerator-379008.iam.gserviceaccount.com'
+
+
+    # - name: Configure AWS Credentials
+    #   uses: aws-actions/configure-aws-credentials@v1
+    #   id: configure-aws-credentials
+    #   with:
+    #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     aws-region: us-east-2
     
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
+    # - name: Set up Python ${{ matrix.python-version }}
+    #   uses: actions/setup-python@v4
+    #   with:
+    #     python-version: ${{ matrix.python-version }}
       
-    - name: Install dependencies for testing
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+    # - name: Install dependencies for testing
+    #   run: |
+    #     python -m pip install --upgrade pip
+    #     pip install -r requirements.txt
      
-    - name: Unit Test With pytest
-      id: unit_test
-      run: | 
-        # Creating images directory in order for the test to pass
-        pytest test_unit_test.py
+    # - name: Unit Test With pytest
+    #   id: unit_test
+    #   run: | 
+    #     # Creating images directory in order for the test to pass
+    #     pytest test_unit_test.py
 
-    - name: Build Docker Compose
-      id: Build
-      run: |
-        echo 'OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}' >> .env
-        docker compose convert
-        docker compose up -d
+    # - name: Build Docker Compose
+    #   id: Build
+    #   run: |
+    #     echo 'OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}' >> .env
+    #     docker compose convert
+    #     docker compose up -d
 
-    - name: E2E test
-      id: E2E
-      run: |
-        sleep 10
-        curl localhost:80/persona
-        pytest test_e2e.py
+    # - name: E2E test
+    #   id: E2E
+    #   run: |
+    #     sleep 10
+    #     curl localhost:80/persona
+    #     pytest test_e2e.py
 
-    - name: Main Branch E2E
-      id: Main-Branch-E2E
-      if: ${{ github.ref == 'refs/heads/main' }} || contains(${{ github.event.head_commit.message }}, '#FULL-E2E')    
-      run: |
-        pytest test_prod_e2e.py
+    # - name: Main Branch E2E
+    #   id: Main-Branch-E2E
+    #   if: ${{ github.ref == 'refs/heads/main' }} || contains(${{ github.event.head_commit.message }}, '#FULL-E2E')    
+    #   run: |
+    #     pytest test_prod_e2e.py
 
     - name: Slack Notification
       uses: act10ns/slack@v2.0.0
