@@ -93,7 +93,7 @@ jobs:
     - name: push the image
       id: new-image-published
       run: |
-        docker tag personagetnerator europe-docker.pkg.dev/personagenerator-379008/personagenerator
+        docker tag personagetnerator europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:latest 
         #docker push europe-docker.pkg.dev/personagenerator-379008/personagenerator:$(git describe --tags)
         docker push europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:latest 
                      
