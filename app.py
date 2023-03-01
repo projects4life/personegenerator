@@ -33,7 +33,6 @@ users = {username: {'password': password}}
 class User(flask_login.UserMixin):
     pass
 
-
 @login_manager.user_loader
 def user_loader(email):
     if email not in users:
@@ -42,8 +41,6 @@ def user_loader(email):
     user = User()
     user.id = email
     return user
-
-
 
 @login_manager.request_loader
 def request_loader(request):
@@ -193,17 +190,9 @@ def send_info_to_chat_gpt(data_about_person):
     is_smiling = "smiling" if data_about_person["smile"] == "True" else "not smiling"
     
     promt_to_chatGpt= f"Please generate a background for a {data_about_person['gender']} character who is {data_about_person['age']} years old and is {is_smiling} in a portrait . Please provide information about his name job education, hobbies, personality, hometown, and background. give the response as a json, the keys should start at uppercase"
-
-    response = openai.Completion.create(
-    model="text-davinci-003",
-    prompt = promt_to_chatGpt,
-    temperature=0.7,
-    max_tokens=256,
-    top_p=1,
-    frequency_penalty=0,
-    presence_penalty=0
-    )
     
+    gpt_respose = chat_get_response(promt_to_chatGpt)
+
 
 
     ##### this is a hotfix for the prod env that will try to get a ajson respone from gebeta
@@ -214,10 +203,11 @@ def send_info_to_chat_gpt(data_about_person):
     json_response = None
     while attempts < max_attempts:
         try:
-            json_response = json.loads(response.choices[0].text)
+            json_response = json.loads(gpt_respose.choices[0].text)
             break  # exit the loop if successful
         except:
             attempts += 1  # increment attempts count if unsuccessful
+            gpt_respose = chat_get_response(promt_to_chatGpt) # Regenearte a response with chat gpt
             if attempts == max_attempts:
                 raise  # raise an exception if maximum attempts exceeded
         
@@ -237,7 +227,19 @@ def render_persona():
 
     return render_template('persona.html',person_image=image_file,image_data=image_data["Background"],name=image_data['Name'], job=image_data["Job"], education=image_data["Education"], hobbies=image_data["Hobbies"], personality=image_data["Personality"], hometown=image_data["Hometown"])
 
+def chat_get_response(promt_to_chatGpt):
 
+    respone = openai.Completion.create(
+    model="text-davinci-003",
+    prompt = promt_to_chatGpt,
+    temperature=0.7,
+    max_tokens=256,
+    top_p=1,
+    frequency_penalty=0,
+    presence_penalty=0
+    )
+    return respone
+    
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True)

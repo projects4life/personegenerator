@@ -8,7 +8,7 @@ import subprocess
 username = os.environ.get("APP_USER")
 password = os.environ.get("APP_PASSWORD")
 
-ENDPOINT = "http://localhost:80"
+ENDPOINT = "http://localhost:5000"
 LIMIT = 5
 
 def test_limitter():
