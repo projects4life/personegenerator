@@ -42,12 +42,6 @@ jobs:
       run: |-
         gcloud auth login --brief --cred-file="${{ steps.auth.outputs.credentials_file_path }}"
 
-    - uses: 'docker/login-action@v1'
-      with:
-        registry: 'europe-docker.pkg.dev' # or REGION-docker.pkg.dev
-        username: 'oauth2accesstoken'
-        password: '${{ steps.gcp-auth.outputs.access_token }}'
-
 
 
     # - name: Configure AWS Credentials
