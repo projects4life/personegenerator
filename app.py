@@ -33,7 +33,6 @@ users = {username: {'password': password}}
 class User(flask_login.UserMixin):
     pass
 
-
 @login_manager.user_loader
 def user_loader(email):
     if email not in users:
@@ -42,8 +41,6 @@ def user_loader(email):
     user = User()
     user.id = email
     return user
-
-
 
 @login_manager.request_loader
 def request_loader(request):
