@@ -33,15 +33,17 @@ jobs:
       name: 'Authenticate to Google Cloud'
       uses: 'google-github-actions/auth@v1'
       with:
-        create_credentials_file: 'true'
         workload_identity_provider: 'projects/320480020538/locations/global/workloadIdentityPools/gh-pool/providers/gh-provider'
         service_account: 'gh-service-account@personagenerator-379008.iam.gserviceaccount.com'
 
-    - id: 'gcloud'
-      name: 'gcloud'
-      run: |-
-        gcloud auth login --brief --cred-file="${{ steps.auth.outputs.credentials_file_path }}"
+    # - id: 'gcloud'
+    #   name: 'gcloud'
+    #   run: |-
+    #     gcloud auth login --brief --cred-file="${{ steps.auth.outputs.credentials_file_path }}"
 
+
+    - name: Docker Auth
+      run: gcloud auth configure-docker europe-docker.pkg.dev
 
 
     # - name: Configure AWS Credentials
