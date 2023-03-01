@@ -33,8 +33,8 @@ jobs:
       name: 'Authenticate to Google Cloud'
       uses: 'google-github-actions/auth@v1'
       with:
-        workload_identity_provider: 'projects/320480020538/locations/global/workloadIdentityPools/githubactionspool/github'
-        service_account: 'github-actions@personagenerator-379008.iam.gserviceaccount.com'
+        workload_identity_provider: 'projects/320480020538/locations/global/workloadIdentityPools/github-pool/providers/my-provider'
+        service_account: 'github-new@personagenerator-379008.iam.gserviceaccount.com'
 
 
     # - name: Configure AWS Credentials
@@ -84,10 +84,10 @@ jobs:
     - name: push the image
       id: new-image-published
       run: |
-        docker tag personagetnerator europe-docker.pkg.dev/personagenerator-379008/personagenerator
+        docker tag europe-docker.pkg.dev/personagenerator-379008/personagenerator
         #docker push europe-docker.pkg.dev/personagenerator-379008/personagenerator:$(git describe --tags)
         docker push europe-docker.pkg.dev/personagenerator-379008/personagenerator   
-
+                     
     - name: Slack Notification
       uses: act10ns/slack@v2.0.0
       # send message even if the ci fails
