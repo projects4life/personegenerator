@@ -8,7 +8,6 @@ jobs:
   versionCalc:
     runs-on: ubuntu-latest
 
-
     steps:
     - uses: actions/checkout@v3
       id: git_clone
@@ -27,4 +26,5 @@ jobs:
 
     - name: access_output
       run: |
-        echo {{ steps.tag.outputs.new_version }}      
+        echo ${{ steps.tag.outputs.new_version }}
+
