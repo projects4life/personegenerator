@@ -10,22 +10,16 @@ password = os.environ.get("APP_PASSWORD")
 login_page = Blueprint('login_page', __name__, template_folder="templates")
 login_manager = flask_login.LoginManager()
 
-
-
 @login_page.record
 def on_load(state):
     global app
     app = state.app
     login_manager.init_app(app)
 
-
-
 users = {username: {'password': password}}
 
 class User(flask_login.UserMixin):
     pass
-
-
 
 
 @login_manager.user_loader

@@ -14,5 +14,3 @@ def test_persona_route():
     print(img)
     assert re.match("static/images/.*", img["src"])
 
-
-# test_persona_route()
