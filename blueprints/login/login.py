@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 import flask_login
 import os
+from blueprints.persona.persona import render_persona
 
 #Env
 username = os.environ.get("APP_USER")
@@ -25,6 +26,8 @@ class User(flask_login.UserMixin):
     pass
 
 
+
+
 @login_manager.user_loader
 def user_loader(email):
     if email not in users:
@@ -45,6 +48,13 @@ def request_loader(request):
     return user
 
 
+## admin page can render without limit
+@login_page.route('/admin', methods=['GET'])
+@flask_login.login_required
+def admin():
+    return render_persona()
+
+
 @login_page.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
@@ -55,7 +65,7 @@ def login():
         user = User()
         user.id = email
         flask_login.login_user(user)
-        return redirect(url_for('admin'))
+        return redirect(url_for('login_page.admin'))
     return 'Bad login', 401
 
 @login_page.route('/protected')
@@ -71,5 +81,6 @@ def logout():
 @login_manager.unauthorized_handler
 def unauthorized_handler():
     return redirect(url_for('login_page.login')) , 302
+
 
 

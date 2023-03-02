@@ -6,17 +6,21 @@ import openai
 import uuid
 import boto3
 import json
-
-# from flask_limiter import Limiter
-# from flask_limiter.util import get_remote_address 
-
-
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address 
 
 persona_page = Blueprint('persona_page', __name__, template_folder="templates",static_folder="static")
 
+limiter = Limiter(get_remote_address)
 
-# @limiter.limit("1 per hour")
+@persona_page.record
+def on_load(state):
+    global limiter
+    app = state.app
+    limiter.init_app(app)
+
 @persona_page.route('/persona', methods=['GET'])
+@limiter.limit("5 per hour")
 def persona():
     return render_persona()
 
