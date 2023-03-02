@@ -12,4 +12,6 @@ COPY static/  ./static
 
 COPY app.py .
 
+COPY blueprints/ ./blueprints
+
 ENTRYPOINT [ "./app.py" ]
