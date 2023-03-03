@@ -21,13 +21,8 @@ def on_load(state):
     app = state.app
     limiter.init_app(app)
 
-@persona_page.route('/test', methods=['GET'])
-@limiter.limit("2 per hour")
-def test():
-    return 'ok'
-
 @persona_page.route('/persona', methods=['GET'])
-@limiter.limit("2 per hour")
+@limiter.limit("5 per hour")
 def persona():
     return render_persona()
 
