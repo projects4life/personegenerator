@@ -1,4 +1,5 @@
-FROM python:alpine3.17
+# FROM python:alpine3.17
+FROM python
 
 WORKDIR /app
 
@@ -14,4 +15,3 @@ COPY app.py .
 
 COPY blueprints/ ./blueprints
 
-ENTRYPOINT [ "python", "app.py"  ]

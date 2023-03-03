@@ -12,7 +12,7 @@ services:
 
   app:
     build: .
-    command: python app.py
+    command: gunicorn --bind 0.0.0.0:5000 app:app
     depends_on:
       mongo:
         condition: service_healthy
@@ -28,7 +28,6 @@ services:
       - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
       - APP_USER=${APP_USER}
       - APP_PASSWORD=${APP_PASSWORD}
-      - MONGO_URL="mongodb://root:root@mongo:27017"
 
   mongo:
     image: mongo
@@ -44,14 +43,3 @@ services:
         timeout: 5s
         retries: 10
         start_period: 10s
-
-  mongo-express:
-    image: mongo-express
-    restart: always
-    ports:
-      - 8081:8081
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: root
-      ME_CONFIG_MONGODB_URL: mongodb://root:root@mongo:27017
-  

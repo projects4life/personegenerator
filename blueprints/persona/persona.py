@@ -6,32 +6,44 @@ import openai
 import uuid
 import boto3
 import json
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address 
+from .limiter import limiter
+import pymongo
 
 persona_page = Blueprint('persona_page', __name__, template_folder="templates",static_folder="static")
 
-limiter = Limiter(get_remote_address)
-
 @persona_page.record
 def on_load(state):
+    """
+    Load the flask application on the blueprint load
+    used to start the limeter
+    """
     global limiter
     app = state.app
     limiter.init_app(app)
 
+@persona_page.route('/test', methods=['GET'])
+@limiter.limit("2 per hour")
+def test():
+    return 'ok'
+
 @persona_page.route('/persona', methods=['GET'])
-@limiter.limit("5 per hour")
+@limiter.limit("2 per hour")
 def persona():
     return render_persona()
 
 def render_persona():
-    # Start loading screen until result is ready
-    # Get random image
+    """
+    A Flask view function that generates a random persona using various helper functions and returns the rendered HTML template with the generated persona information.
+    
+    Example of image data to be rendered: 
+    image_data={'Name': 'Adam Smith', 'Job': 'Student', 'Education': 'Preschool', 'Hobbies': ['Playing with Toys', 'Drawing', 'Making Music'], 'Personality': 'Energetic and Inquisitive', 'Hometown': 'New York City, USA', 'Background': 'Adam is a 4.5 year old student from New York City. He loves playing with toys, drawing and making music. He is an energetic and inquisitive kid who loves exploring the world around him. He loves spending time with his family, playing outside and learning new things.'}
+
+    Returns:
+    HTML template -- Rendered HTML template with the generated persona information.
+    """
     image_file = get_random_image()
     image_data_aws= get_image_info_from_aws(image_file)
     image_data = send_info_to_chat_gpt(image_data_aws)
-
-    # image_data={'Name': 'Adam Smith', 'Job': 'Student', 'Education': 'Preschool', 'Hobbies': ['Playing with Toys', 'Drawing', 'Making Music'], 'Personality': 'Energetic and Inquisitive', 'Hometown': 'New York City, USA', 'Background': 'Adam is a 4.5 year old student from New York City. He loves playing with toys, drawing and making music. He is an energetic and inquisitive kid who loves exploring the world around him. He loves spending time with his family, playing outside and learning new things.'}
 
     return render_template('persona.html',person_image=image_file,image_data=image_data["Background"],name=image_data['Name'], job=image_data["Job"], education=image_data["Education"], hobbies=image_data["Hobbies"], personality=image_data["Personality"], hometown=image_data["Hometown"])
 
@@ -151,7 +163,9 @@ def send_info_to_chat_gpt(data_about_person):
     return json_response
     
 def chat_get_response(promt_to_chatGpt):
-
+    """
+    This Function sends a promt to chatGpt and return the response
+    """
     respone = openai.Completion.create(
     model="text-davinci-003",
     prompt = promt_to_chatGpt,
