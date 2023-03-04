@@ -11,8 +11,9 @@ def get_proxy_remote_address():
         return str(request.headers.get('X-Real-IP'))
     return request.remote_addr or '127.0.0.1'
 
+
 mongo_url = os.environ.get("MONGO_URL")
 if mongo_url is None:
-    mongo_url = "mongodb://root:root@localhost:27017"
+    mongo_url = "mongodb://root:root@localhost:27017" #URL for development
 
 limiter = Limiter(key_func=get_proxy_remote_address,storage_uri=mongo_url)
