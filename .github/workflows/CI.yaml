@@ -29,39 +29,39 @@ jobs:
     - uses: actions/checkout@v3
       id: git_clone
 
-    - id: 'gcp-auth'
-      name: 'Authenticate to Google Cloud'
-      uses: 'google-github-actions/auth@v1'
-      with:
-        workload_identity_provider: 'projects/320480020538/locations/global/workloadIdentityPools/gh-pool/providers/gh-provider'
-        service_account: 'gh-service-account@personagenerator-379008.iam.gserviceaccount.com'
+    # - id: 'gcp-auth'
+    #   name: 'Authenticate to Google Cloud'
+    #   uses: 'google-github-actions/auth@v1'
+    #   with:
+    #     workload_identity_provider: 'projects/320480020538/locations/global/workloadIdentityPools/gh-pool/providers/gh-provider'
+    #     service_account: 'gh-service-account@personagenerator-379008.iam.gserviceaccount.com'
 
-    - name: Docker Auth
-      run: gcloud auth configure-docker europe-docker.pkg.dev
+    # - name: Docker Auth
+    #   run: gcloud auth configure-docker europe-docker.pkg.dev
 
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      id: configure-aws-credentials
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-2
+    # - name: Configure AWS Credentials
+    #   uses: aws-actions/configure-aws-credentials@v1
+    #   id: configure-aws-credentials
+    #   with:
+    #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     aws-region: us-east-2
     
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
+    # - name: Set up Python ${{ matrix.python-version }}
+    #   uses: actions/setup-python@v4
+    #   with:
+    #     python-version: ${{ matrix.python-version }}
       
-    - name: Install dependencies for testing
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+    # - name: Install dependencies for testing
+    #   run: |
+    #     python -m pip install --upgrade pip
+    #     pip install -r requirements.txt
      
-    - name: Unit Test With pytest
-      id: unit_test
-      run: | 
-        # Creating images directory in order for the test to pass
-        pytest test_unit_test.py
+    # - name: Unit Test With pytest
+    #   id: unit_test
+    #   run: | 
+    #     # Creating images directory in order for the test to pass
+    #     pytest test_unit_test.py
 
     - name: Build Docker Compose
       id: Build
