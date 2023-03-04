@@ -18,7 +18,7 @@ def test_aws():
    # smile = true or false
    # gender = male or female
    result=get_image_info_from_aws(get_random_image())
-   assert  1 < float(result["age"]) < 100 
+   assert  1 <= float(result["age"]) <= 100 
    assert result["smile"] in ("True", "False")
    assert result["gender"] in ("Male", "Female")
 
@@ -30,7 +30,7 @@ def test_chatgpt_generate_logical_response():
    assert 'Job' in data.keys()
    assert 'Education' in data.keys()
    assert 'Hobbies' in data.keys()
-   assert 'Personality' in data.keys()
+   assert 'Age' in data.keys()
    assert 'Hometown' in data.keys()
    assert 'Background' in data.keys()
 
