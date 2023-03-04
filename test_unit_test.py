@@ -1,5 +1,5 @@
 import pytest
-from app import * 
+from blueprints.persona.persona import get_random_image,get_image_info_from_aws,send_info_to_chat_gpt
 import os
 
 # test for the get_random_image function

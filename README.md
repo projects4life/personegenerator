@@ -11,6 +11,12 @@
 - Generate person information: Users can generate random person information by clicking the "Generate" button on the application.
 - View generated information: The generated person information is displayed on the application for the user to view.
 
+# examples 
+![example-photo-1](static/images/ella-davis.png)<br>
+![example-photo-2](static/images/joh-dou.png)<br>
+![example-photo-3](static/images/john-smith.png)<br>
+![example-photo-4](static/images/karen-smith.png)<br>
+![example-photo-5](static/images/meredith-smith.png)<br>
 
 # credits
 PersonGenerator was created by [Dvir Pashut] and [Elior Estring] (who did most of the job).

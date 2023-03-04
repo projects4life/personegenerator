@@ -1,4 +1,5 @@
 FROM python:alpine3.17
+# FROM python
 
 WORKDIR /app
 
@@ -12,4 +13,5 @@ COPY static/  ./static
 
 COPY app.py .
 
-ENTRYPOINT [ "./app.py" ]
+COPY blueprints/ ./blueprints
+
