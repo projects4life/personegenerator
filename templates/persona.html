@@ -47,6 +47,10 @@
                 <th scope="row">Name</th>
                 <td>{{ name }}</td>
               </tr>
+              <tr class="table-warning">
+                <th scope="row">Age</th>
+                <td>{{  age }}</td>
+              </tr>
               <tr class="table-secondary">
                 <th scope="row">Job</th>
                 <td>{{ job }}</td>
@@ -57,11 +61,7 @@
               </tr>
               <tr class="table-danger">
                 <th scope="row">Hobbies</th>
-                <td>{% for hobbie in hobbies %}{{ hobbie }}{% endfor %}</td>
-              </tr>
-              <tr class="table-warning">
-                <th scope="row">Personality</th>
-                <td>{{  personality }}</td>
+                <td>{{ hobbies }}</td>
               </tr>
               <tr class="table-info">
                 <th scope="row">Hometown</th>
@@ -70,11 +70,16 @@
             </tbody>
           </table>
         </div>
-
+        
         <div class="col data">
-          {{ image_data }}
+          <div class="card">
+            <div class="card-header">Backgound</div>
+            <div class="card-body">{{ image_data }}</div>
+            <div class="card-footer">
+              <button class="btn btn-primary" onclick="location.reload()">Refresh</button>
+            </div>
+          </div>
         </div>
-
         
       </div>
     </div>
