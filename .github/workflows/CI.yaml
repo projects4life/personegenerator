@@ -12,7 +12,7 @@ env:
   AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
   APP_USER: ${{ secrets.APP_PASSWORD }}
   APP_PASSWORD: ${{ secrets.APP_USER }}
-  MONGO_URL: ${{ secrets.APP_USER }}
+  MONGO_URL: ${{ secrets.MONGO_URL }}
 
 permissions:
   id-token: write # This is required for requesting the JWT
