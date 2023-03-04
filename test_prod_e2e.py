@@ -26,7 +26,6 @@ def test_login():
     payload = {
     "email": username,
     "password": password
-
     }
 
     payload2 = {
