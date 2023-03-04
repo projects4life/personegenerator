@@ -74,6 +74,7 @@ jobs:
         sleep 10
         docker ps -a
         docker logs personegenerator-proxy-1
+        docker logs personegenerator-app-1
         curl localhost:80/persona
         pytest test_e2e.py
 
