@@ -13,8 +13,8 @@ env:
   APP_USER: ${{ secrets.APP_PASSWORD }}
   APP_PASSWORD: ${{ secrets.APP_USER }}
   MONGO_URL: ${{ secrets.MONGO_URL }}
-  MONGO_USER: ${{ MONGO_USER }}
-  MONGO_PASS: ${{ MONGO_PASS }}
+  MONGO_USER: ${{ secrets.MONGO_USER }}
+  MONGO_PASS: ${{ secrets.MONGO_PASS }}
 
 permissions:
   id-token: write # This is required for requesting the JWT
