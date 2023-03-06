@@ -14,7 +14,6 @@ app.register_blueprint(persona_page)
 def not_found(e):
   return render_template("404.html")
 
-
 # Index page
 @app.route('/', methods=['GET'])
 def index():
