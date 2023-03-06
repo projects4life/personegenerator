@@ -10,6 +10,10 @@ app.secret_key = '6226bfbe64b9'  # Change this!!
 app.register_blueprint(login_page)
 app.register_blueprint(persona_page)
 
+@app.errorhandler(404)
+def not_found(e):
+  return render_template("404.html")
+
 # Index page
 @app.route('/', methods=['GET'])
 def index():
