@@ -6,15 +6,17 @@ import openai
 import uuid
 import boto3
 import json
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address 
+from .limiter import limiter
+import pymongo
 
 persona_page = Blueprint('persona_page', __name__, template_folder="templates",static_folder="static")
 
-limiter = Limiter(get_remote_address)
-
 @persona_page.record
 def on_load(state):
+    """
+    Load the flask application on the blueprint load
+    used to start the limeter
+    """
     global limiter
     app = state.app
     limiter.init_app(app)
@@ -25,15 +27,21 @@ def persona():
     return render_persona()
 
 def render_persona():
-    # Start loading screen until result is ready
-    # Get random image
+    """
+    A Flask view function that generates a random persona using various helper functions and returns the rendered HTML template with the generated persona information.
+    
+    Example of image data to be rendered: 
+    image_data={'Name': 'Adam Smith', 'Job': 'Student', 'Education': 'Preschool', 'Hobbies': ['Playing with Toys', 'Drawing', 'Making Music'], 'Personality': 'Energetic and Inquisitive', 'Hometown': 'New York City, USA', 'Background': 'Adam is a 4.5 year old student from New York City. He loves playing with toys, drawing and making music. He is an energetic and inquisitive kid who loves exploring the world around him. He loves spending time with his family, playing outside and learning new things.'}
+
+    Returns:
+    HTML template -- Rendered HTML template with the generated persona information.
+    """
     image_file = get_random_image()
     image_data_aws= get_image_info_from_aws(image_file)
     image_data = send_info_to_chat_gpt(image_data_aws)
 
     # image_data={'Name': 'Adam Smith', 'Job': 'Student', 'Education': 'Preschool', 'Hobbies': ['Playing with Toys', 'Drawing', 'Making Music'], 'Personality': 'Energetic and Inquisitive', 'Hometown': 'New York City, USA', 'Background': 'Adam is a 4.5 year old student from New York City. He loves playing with toys, drawing and making music. He is an energetic and inquisitive kid who loves exploring the world around him. He loves spending time with his family, playing outside and learning new things.'}
-
-    return render_template('persona.html',person_image=image_file,image_data=image_data["Background"],name=image_data['Name'], job=image_data["Job"], education=image_data["Education"], hobbies=image_data["Hobbies"], personality=image_data["Personality"], hometown=image_data["Hometown"])
+    return render_template('persona.html',person_image=image_file,image_data=image_data["Background"],name=image_data['Name'], job=image_data["Job"], education=image_data["Education"], hobbies=image_data["Hobbies"], age=image_data["Age"], hometown=image_data["Hometown"])
 
 def get_random_image():
     """
@@ -97,7 +105,7 @@ def get_image_info_from_aws(photo):
     #print('Detected faces for ' + photo)    
     for faceDetail in response['FaceDetails']:
         #print('The detected face is around ' + str(int(faceDetail['AgeRange']['Low']) + int(faceDetail['AgeRange']['High']) / 2 ))
-        age = str(int(faceDetail['AgeRange']['Low']) + int(faceDetail['AgeRange']['High']) / 2 )
+        age = str(((int(faceDetail['AgeRange']['High']) - int(faceDetail['AgeRange']['Low'])) // 4) + int(faceDetail['AgeRange']['Low']))
         #print("gender: " + str(faceDetail['Gender']['Value']) + " with " + str(faceDetail['Gender']['Confidence']) + "%" )
         gender = str(faceDetail['Gender']['Value'])
         #print("smile: " + str(faceDetail['Smile']['Value']) + " with " + str(faceDetail['Smile']['Confidence']) + "%" )
@@ -126,11 +134,9 @@ def send_info_to_chat_gpt(data_about_person):
     openai.api_key = os.getenv("OPENAI_API_KEY")
     is_smiling = "smiling" if data_about_person["smile"] == "True" else "not smiling"
     
-    promt_to_chatGpt= f"Please generate a background for a {data_about_person['gender']} character who is {data_about_person['age']} years old and is {is_smiling} in a portrait . Please provide information about his name job education, hobbies, personality, hometown, and background. give the response as a json, the keys should start at uppercase"
+    promt_to_chatGpt= f"fill in the missing sections for me... be creative. the age is {data_about_person['age']} and the gender is {data_about_person['gender']} all  keys must start with capital letter\r\n\r\nName: (choose a name+ last name. dont use common names)\r\nAge: (what I provided)\r\nGender: (what I provided)\r\nHobbies: (at least 3. type string)\r\nJob: (according to the age and education)\r\nEducation: (only name of the degree if he/she got one. don't incloud location)\r\nBackground:  (no less than 75 words)\r\nHometown: (country,state,city)(choose places from all around the planet. string not list )\r\n\r\nPlease generate a JSON response with this information(make sure this is correct JSON), replace all the information with the instructions inside do not add sub-fields to location and education!!!!!"
     
     gpt_respose = chat_get_response(promt_to_chatGpt)
-
-
 
     ##### this is a hotfix for the prod env that will try to get a ajson respone from gebeta
     ##### if the data recived from gebeta is not valid the try up to $max_attempts times
@@ -151,7 +157,9 @@ def send_info_to_chat_gpt(data_about_person):
     return json_response
     
 def chat_get_response(promt_to_chatGpt):
-
+    """
+    This Function sends a promt to chatGpt and return the response
+    """
     respone = openai.Completion.create(
     model="text-davinci-003",
     prompt = promt_to_chatGpt,

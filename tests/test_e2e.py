@@ -13,4 +13,3 @@ def test_persona_route():
     img = soup.find("img", {"id": "avatar"})
     print(img)
     assert re.match("static/images/.*", img["src"])
-

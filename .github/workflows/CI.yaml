@@ -12,6 +12,9 @@ env:
   AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
   APP_USER: ${{ secrets.APP_PASSWORD }}
   APP_PASSWORD: ${{ secrets.APP_USER }}
+  MONGO_URL: ${{ secrets.MONGO_URL }}
+  MONGO_USER: ${{ secrets.MONGO_USER }}
+  MONGO_PASS: ${{ secrets.MONGO_PASS }}
 
 permissions:
   id-token: write # This is required for requesting the JWT
@@ -38,7 +41,7 @@ jobs:
     - name: Docker Auth
       run: gcloud auth configure-docker europe-docker.pkg.dev
 
-    - name: Configure AWS Credentials
+    - name: Configure AWS Credential
       uses: aws-actions/configure-aws-credentials@v1
       id: configure-aws-credentials
       with:
@@ -59,8 +62,9 @@ jobs:
     - name: Unit Test With pytest
       id: unit_test
       run: | 
+        export PYTHONPATH=/home/user/myproject:$PYTHONPATH
         # Creating images directory in order for the test to pass
-        pytest test_unit_test.py
+        pytest tests/test_unit_test.py
 
     - name: Build Docker Compose
       id: Build
@@ -71,13 +75,13 @@ jobs:
       id: E2E
       run: |
         sleep 10
-        pytest test_e2e.py
+        pytest tests/test_e2e.py
 
     - name: Main Branch E2E
       id: Main-Branch-E2E
       if: ${{ github.ref == 'refs/heads/main' || contains(github.event.head_commit.message, '#FULL-E2E') }} 
       run: |
-        pytest test_prod_e2e.py
+        pytest tests/test_prod_e2e.py
 
     # Calculate Version only if on main
     - name: Bump version and push tag
