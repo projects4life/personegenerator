@@ -113,7 +113,7 @@ jobs:
 
   CD: 
     # if: ${{ github.ref == 'refs/heads/main' }}
-    needs: CI
+    # needs: CI
     runs-on: ubuntu-latest
 
     steps:
