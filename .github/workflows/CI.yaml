@@ -111,18 +111,11 @@ jobs:
   #       status: ${{ job.status }}
   #       steps: ${{ toJson(steps) }}
 
-  CD: 
+  deploying-to-production: 
     # if: ${{ github.ref == 'refs/heads/main' }}
     # needs: CI
     runs-on: ubuntu-latest
-
     steps:
-
-    - uses: act10ns/slack@v2.0.0
-      with:
-        status: starting
-        message: Starting CD....
-      if: always()    
 
     - uses: actions/checkout@v3
       id: git_clone
@@ -143,10 +136,24 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-    - name: test
+    - name: deploy
+      id: deploy-new-version
       run: |
-        cat .env
-    
+        Instances=("34.165.102.32") 
+        for ip in ${Instances[@]}; do
+          scp -r .env docker-compose.prod.yml nginx ubuntu@$ip:/home/ubuntu/       # Copy neccecery files for docker compose to work
+          yes | ssh ubuntu@$ip gcloud auth configure-docker europe-docker.pkg.dev  # Authenticate with GCP artifactRegistry
+          ssh ubuntu@$ip docker compose -f docker-compose.prod.yml up -d --build   # Run the docker compose 
+        done
+
+    - name: Slack Notification
+      uses: act10ns/slack@v2.0.0
+      # send message even if the ci fails
+      if: always()
+      with:
+        status: ${{ job.status }}
+        steps: ${{ toJson(steps) }}
+
 
 
 
