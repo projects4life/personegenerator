@@ -21,99 +21,99 @@ permissions:
   contents: read  # This is required for actions/checkout
 
 jobs:
-  # CI:
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       python-version: ["3.10"]
+  CI:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10"]
 
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #     id: git_clone
+    steps:
+    - uses: actions/checkout@v3
+      id: git_clone
 
-  #   - id: 'gcp-auth'
-  #     name: 'Authenticate to Google Cloud'
-  #     uses: 'google-github-actions/auth@v1'
-  #     with:
-  #       workload_identity_provider: 'projects/320480020538/locations/global/workloadIdentityPools/gh-pool/providers/gh-provider'
-  #       service_account: 'gh-service-account@personagenerator-379008.iam.gserviceaccount.com'
+    - id: 'gcp-auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        workload_identity_provider: 'projects/320480020538/locations/global/workloadIdentityPools/gh-pool/providers/gh-provider'
+        service_account: 'gh-service-account@personagenerator-379008.iam.gserviceaccount.com'
 
-  #   - name: Docker Auth
-  #     run: gcloud auth configure-docker europe-docker.pkg.dev
+    - name: Docker Auth
+      run: gcloud auth configure-docker europe-docker.pkg.dev
 
-  #   - name: Configure AWS Credential
-  #     uses: aws-actions/configure-aws-credentials@v1
-  #     id: configure-aws-credentials
-  #     with:
-  #       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #       aws-region: us-east-2
+    - name: Configure AWS Credential
+      uses: aws-actions/configure-aws-credentials@v1
+      id: configure-aws-credentials
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-2
     
-  #   - name: Set up Python ${{ matrix.python-version }}
-  #     uses: actions/setup-python@v4
-  #     with:
-  #       python-version: ${{ matrix.python-version }}
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
       
-  #   - name: Install dependencies for testing
-  #     run: |
-  #       python -m pip install --upgrade pip
-  #       pip install -r requirements.txt
+    - name: Install dependencies for testing
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
      
-  #   - name: Unit Test With pytest
-  #     id: unit_test
-  #     run: | 
-  #       export PYTHONPATH=/home/user/myproject:$PYTHONPATH
-  #       # Creating images directory in order for the test to pass
-  #       pytest tests/test_unit_test.py
+    - name: Unit Test With pytest
+      id: unit_test
+      run: | 
+        export PYTHONPATH=/home/user/myproject:$PYTHONPATH
+        # Creating images directory in order for the test to pass
+        pytest tests/test_unit_test.py
 
-  #   - name: Build Docker Compose
-  #     id: Build
-  #     run: |
-  #       docker compose up -d
+    - name: Build Docker Compose
+      id: Build
+      run: |
+        docker compose up -d
 
-  #   - name: E2E test
-  #     id: E2E
-  #     run: |
-  #       sleep 10
-  #       pytest tests/test_e2e.py
+    - name: E2E test
+      id: E2E
+      run: |
+        sleep 10
+        pytest tests/test_e2e.py
 
-  #   - name: Main Branch E2E
-  #     id: Main-Branch-E2E
-  #     if: ${{ github.ref == 'refs/heads/main' || contains(github.event.head_commit.message, '#FULL-E2E') }} 
-  #     run: |
-  #       pytest tests/test_prod_e2e.py
+    - name: Main Branch E2E
+      id: Main-Branch-E2E
+      if: ${{ github.ref == 'refs/heads/main' || contains(github.event.head_commit.message, '#FULL-E2E') }} 
+      run: |
+        pytest tests/test_prod_e2e.py
 
-  #   # Calculate Version only if on main
-  #   - name: Bump version and push tag
-  #     id: tag
-  #     # Will be changed to master soon
-  #     if: ${{ github.ref == 'refs/heads/main' }}
-  #     uses: anothrNick/github-tag-action@1.61.0
-  #     env:
-  #       GITHUB_TOKEN: ${{ secrets.API_GITHUB_TOKEN }}
-  #       WITH_V: false
-  #       DEFAULT_BUMP: patch
-  #       INITIAL_VERSION: 0.0.0
-  #       DEFAULT_BRANCH: main
+    # Calculate Version only if on main
+    - name: Bump version and push tag
+      id: tag
+      # Will be changed to master soon
+      if: ${{ github.ref == 'refs/heads/main' }}
+      uses: anothrNick/github-tag-action@1.61.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.API_GITHUB_TOKEN }}
+        WITH_V: false
+        DEFAULT_BUMP: patch
+        INITIAL_VERSION: 0.0.0
+        DEFAULT_BRANCH: main
 
-  #   - name: push the image
-  #     id: new-image-published
-  #     if: ${{ github.ref == 'refs/heads/main' }}
-  #     run: |
-  #       docker tag personagetnerator europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:${{ steps.tag.outputs.new_tag }}
-  #       docker push europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:${{ steps.tag.outputs.new_tag }}
+    - name: push the image
+      id: new-image-published
+      if: ${{ github.ref == 'refs/heads/main' }}
+      run: |
+        docker tag personagetnerator europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:${{ steps.tag.outputs.new_tag }}
+        docker push europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:${{ steps.tag.outputs.new_tag }}
                      
-  #   - name: Slack Notification
-  #     uses: act10ns/slack@v2.0.0
-  #     # send message even if the ci fails
-  #     if: always()
-  #     with:
-  #       status: ${{ job.status }}
-  #       steps: ${{ toJson(steps) }}
+    - name: Slack Notification
+      uses: act10ns/slack@v2.0.0
+      # send message even if the ci fails
+      if: always()
+      with:
+        status: ${{ job.status }}
+        steps: ${{ toJson(steps) }}
 
   deploying-to-production: 
-    # if: ${{ github.ref == 'refs/heads/main' }}
-    # needs: CI
+    if: ${{ github.ref == 'refs/heads/main' }}
+    needs: CI
     runs-on: ubuntu-latest
     steps:
 
@@ -143,11 +143,6 @@ jobs:
         name: id_rsa # optional
         known_hosts: ${{ secrets.KNOWN_HOSTS }}
         if_key_exists: fail # replace / ignore / fail; optional (defaults to fail)
-
-    - name: test-env
-      run: |
-        echo test >> .env
-        cat .env
 
     - name: deploy
       id: deploy-new-version
