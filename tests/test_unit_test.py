@@ -29,7 +29,7 @@ def test_chatgpt_generate_logical_response():
    Test to verify the ChatGpt returns a json with the expected fields
    """
    data = send_info_to_chat_gpt(get_image_info_from_aws(get_random_image()))
-   assert verify_gpt_response_contains_expected_fields(data) == True
+   verify_gpt_response_contains_expected_fields(data)
 
 def is_jpeg(filename):
     """Check if a file is a JPEG image."""
@@ -43,6 +43,4 @@ def verify_gpt_response_contains_expected_fields(data):
     """Verify that the response from GPT contains all expected fields."""
     expected_fields = ['Name', 'Job', 'Education', 'Hobbies', 'Age', 'Hometown', 'Background']
     for field in expected_fields:
-        if field not in data:
-            return False
-    return True
+        assert field in data, f"Expected field '{field}' not found in response from GPT"
