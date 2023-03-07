@@ -145,6 +145,12 @@ jobs:
         known_hosts: ${{ secrets.KNOWN_HOSTS }}
         if_key_exists: fail # replace / ignore / fail; optional (defaults to fail)
 
+
+    - name: test-env
+      run: |
+        cat .env
+
+
     - name: deploy
       id: deploy-new-version
       run: |
