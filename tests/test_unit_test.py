@@ -10,6 +10,7 @@ def test_get_random_image():
  # this will check the file itself and see if the file is ok
  with open(expected_path, "rb") as f:
     data = f.read()
+    print(expected_path)
     assert data[:2] == b"\xff\xd8"  # Check the first two bytes of the file for the JPEG magic number
 
 def test_aws():
