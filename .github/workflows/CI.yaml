@@ -154,9 +154,7 @@ jobs:
       run: |
         Instances=("34.165.4.109") 
         for ip in ${Instances[@]}; do
-          # scp -r .env docker-compose.prod.yml nginx ubuntu@$ip:/home/ubuntu/       # Copy neccecery files for docker compose to work
-          cat .env
-          scp .env ubuntu@$ip:/home/ubuntu/  
+          scp -r .env docker-compose.prod.yml nginx ubuntu@$ip:/home/ubuntu/       # Copy neccecery files for docker compose to work
           yes | ssh ubuntu@$ip gcloud auth configure-docker europe-docker.pkg.dev  # Authenticate with GCP artifactRegistry
           ssh ubuntu@$ip docker compose -f docker-compose.prod.yml up -d --build   # Run the docker compose 
         done
