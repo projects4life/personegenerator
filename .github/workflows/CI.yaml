@@ -148,7 +148,7 @@ jobs:
 
     - name: test-env
       run: |
-        echo test > .env
+        echo test >> .env
         cat .env
 
 
