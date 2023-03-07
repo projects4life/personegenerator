@@ -148,7 +148,7 @@ jobs:
     - name: deploy
       id: deploy-new-version
       run: |
-        Instances=("34.165.126.102") 
+        Instances=("34.165.4.109") 
         for ip in ${Instances[@]}; do
           scp -r .env docker-compose.prod.yml nginx ubuntu@$ip:/home/ubuntu/       # Copy neccecery files for docker compose to work
           yes | ssh ubuntu@$ip gcloud auth configure-docker europe-docker.pkg.dev  # Authenticate with GCP artifactRegistry
