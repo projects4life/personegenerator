@@ -46,13 +46,13 @@ def request_loader(request):
 @login_page.route('/admin', methods=['GET'])
 @flask_login.login_required
 def admin():
-    return render_template("loading.html", user=True)
+    return render_template("loading.html", user=True) ### user=treu becouse we are logg in
 
 
 @login_page.route('/adminR', methods=['GET']) #########this is here for the screen loader
 @flask_login.login_required
 def personaR():
-    return render_persona(True)
+    return render_persona(True)   ###### let the html know that this came from admin and not persona
 
 
 @login_page.route('/login', methods=['GET', 'POST'])

@@ -24,12 +24,12 @@ def on_load(state):
 @persona_page.route('/persona', methods=['GET'])
 @limiter.limit("5 per hour")
 def persona():
-    return render_template("loading.html")
+    return render_template("loading.html", user=False) #### becouse this is the free pass and i want it to count thire times
 
 @persona_page.route('/personaR', methods=['GET']) ######this is here for the screen loader
 @limiter.limit("5 per hour")
 def personaR():
-    return render_persona(False)
+    return render_persona(False) ### let the html know that this request came from persona and not admin
 
 def render_persona(user):
     """
