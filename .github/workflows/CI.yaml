@@ -136,6 +136,15 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
+    - name: Install SSH key
+      id: Install-SSH-KEY
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.PROD_PRIVATE_KEY }}
+        name: id_rsa # optional
+        # known_hosts: ${{ secrets.KNOWN_HOSTS }}
+        if_key_exists: fail # replace / ignore / fail; optional (defaults to fail)
+
     - name: deploy
       id: deploy-new-version
       run: |
