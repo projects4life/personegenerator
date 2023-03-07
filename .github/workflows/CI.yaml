@@ -135,8 +135,7 @@ jobs:
         AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        TAG: $(git describe --tags)
-
+        
     - name: Install SSH key
       id: Install-SSH-KEY
       uses: shimataro/ssh-key-action@v2
@@ -149,6 +148,7 @@ jobs:
 
     - name: test-env
       run: |
+        echo $(git describe --tags) >> .env
         cat .env
 
 
