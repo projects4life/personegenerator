@@ -24,7 +24,7 @@ def on_load(state):
 @persona_page.route('/persona', methods=['GET'])
 @limiter.limit("5 per hour")
 def persona():
-    return render_template("loading.html", user=False) #### becouse this is the free pass and i want it to count thire times
+    return render_template("loading.html", user=False) #### becouse this is the free pass and i want it to count thier times
 
 @persona_page.route('/personaR', methods=['GET']) ######this is here for the screen loader
 @limiter.limit("5 per hour")
@@ -137,7 +137,6 @@ def send_info_to_chat_gpt(data_about_person):
        The json response as chat gpt recived
     """
     openai.api_key = os.getenv("OPENAI_API_KEY")
-    is_smiling = "smiling" if data_about_person["smile"] == "True" else "not smiling"
     
     promt_to_chatGpt= f"fill in the missing sections for me... be creative. the age is {data_about_person['age']} and the gender is {data_about_person['gender']} all  keys must start with capital letter\r\n\r\nName: (choose a name+ last name. dont use common names)\r\nAge: (what I provided)\r\nGender: (what I provided)\r\nHobbies: (at least 3. type string)\r\nJob: (according to the age and education)\r\nEducation: (only name of the degree if he/she got one. don't incloud location)\r\nBackground:  (no less than 75 words)\r\nHometown: (country,state,city)(choose places from all around the planet. string not list )\r\n\r\nPlease generate a JSON response with this information(make sure this is correct JSON), replace all the information with the instructions inside do not add sub-fields to location and education!!!!!"
     
@@ -158,7 +157,20 @@ def send_info_to_chat_gpt(data_about_person):
             gpt_respose = chat_get_response(promt_to_chatGpt) # Regenearte a response with chat gpt
             if attempts == max_attempts:
                 raise  # raise an exception if maximum attempts exceeded
-        
+    
+    ### second test to make sure the response keys are with capital letters capital letters 
+    attempts = 0 
+    while attempts < max_attempts:
+        try:
+            data = json_response["Background"]
+            data = json_response["Hometown"]
+            break  # exit the loop if successful
+        except:
+            attempts += 1  # increment attempts count if unsuccessful
+            gpt_respose = chat_get_response(promt_to_chatGpt) # Regenearte a response with chat gpt
+            if attempts == max_attempts:
+                raise  # raise an exception if maximum attempts exceeded    
+    
     return json_response
     
 def chat_get_response(promt_to_chatGpt):
