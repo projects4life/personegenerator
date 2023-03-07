@@ -46,13 +46,19 @@ def request_loader(request):
 @login_page.route('/admin', methods=['GET'])
 @flask_login.login_required
 def admin():
-    return render_persona()
+    return render_template("loading.html", user=True)
+
+
+@login_page.route('/adminR', methods=['GET']) #########this is here for the screen loader
+@flask_login.login_required
+def personaR():
+    return render_persona(True)
 
 
 @login_page.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        return render_template("login.html")
+        return render_template("login.html",)
 
     email = request.form['email']
     if email in users and request.form['password'] == users[email]['password']:

@@ -24,9 +24,14 @@ def on_load(state):
 @persona_page.route('/persona', methods=['GET'])
 @limiter.limit("5 per hour")
 def persona():
-    return render_persona()
+    return render_template("loading.html")
 
-def render_persona():
+@persona_page.route('/personaR', methods=['GET']) ######this is here for the screen loader
+@limiter.limit("5 per hour")
+def personaR():
+    return render_persona(False)
+
+def render_persona(user):
     """
     A Flask view function that generates a random persona using various helper functions and returns the rendered HTML template with the generated persona information.
     
@@ -41,7 +46,7 @@ def render_persona():
     image_data = send_info_to_chat_gpt(image_data_aws)
 
     # image_data={'Name': 'Adam Smith', 'Job': 'Student', 'Education': 'Preschool', 'Hobbies': ['Playing with Toys', 'Drawing', 'Making Music'], 'Personality': 'Energetic and Inquisitive', 'Hometown': 'New York City, USA', 'Background': 'Adam is a 4.5 year old student from New York City. He loves playing with toys, drawing and making music. He is an energetic and inquisitive kid who loves exploring the world around him. He loves spending time with his family, playing outside and learning new things.'}
-    return render_template('persona.html',person_image=image_file,image_data=image_data["Background"],name=image_data['Name'], job=image_data["Job"], education=image_data["Education"], hobbies=image_data["Hobbies"], age=image_data["Age"], hometown=image_data["Hometown"])
+    return render_template('persona.html',person_image=image_file,image_data=image_data["Background"],name=image_data['Name'], job=image_data["Job"], education=image_data["Education"], hobbies=image_data["Hobbies"], age=image_data["Age"], hometown=image_data["Hometown"], user=user)
 
 def get_random_image():
     """
