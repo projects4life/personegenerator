@@ -9,7 +9,6 @@ username = os.environ.get("APP_USER")
 password = os.environ.get("APP_PASSWORD")
 
 
-
 ENDPOINT = "http://localhost:80"
 LIMIT = 5
 
@@ -24,7 +23,7 @@ def test_limitter():
     print(response)
     assert response.status_code == 429
 
-    
+
     for i in range(LIMIT):
         response = requests.get(f"{ENDPOINT}/personaR")
         assert response.status_code == 200 
