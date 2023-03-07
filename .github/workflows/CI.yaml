@@ -148,7 +148,7 @@ jobs:
 
     - name: test-env
       run: |
-        echo $(git describe --tags) >> .env
+        echo test > .env
         cat .env
 
 
