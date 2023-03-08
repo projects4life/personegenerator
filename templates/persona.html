@@ -13,19 +13,18 @@
       crossorigin="anonymous"
     />
 
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/loading.css') }}"/>
     <title>Persona Generator</title>
   </head>
-  <body class="bg-light p-2 text-dark bg-opacity-25">
+  <body>
     <!-- NavBar -->
-   <a href="/">
-    <nav class="navbar navbar-light bg-success">
-      <div class="container-fluid">
-        <span class="navbar-brand h1 m-auto">&#11088;&#11088;&#11088; Persona Generator &#11088;&#11088;&#11088;</span>
-      </div>
-    </nav>
-    </a>
- 
-
+    <a href="/">
+      <nav class="navbar navbar-light bg-primary" style="background-color: #1FB6DB;">
+        <div class="container-fluid">
+          <span class="navbar-brand h1 m-auto">&#11088;&#11088;&#11088; Persona Generator &#11088;&#11088;&#11088;</span>
+        </div>
+      </nav>
+      </a>
     <!-- <img src="/static/images/random-face.jgp" alt="" srcset=""> -->
     <!-- Optional JavaScript; choose one of the two! -->
 
@@ -76,7 +75,11 @@
             <div class="card-header">Backgound</div>
             <div class="card-body">{{ image_data }}</div>
             <div class="card-footer">
-              <button class="btn btn-primary" onclick="location.reload()">Refresh</button>
+              {% if user %}
+                <button class="btn btn-primary" onclick="window.location.href='/admin'">Refresh</button>
+              {% else %}
+                <button class="btn btn-primary" onclick="window.location.href='/persona'">Refresh</button>
+              {% endif %}
             </div>
           </div>
         </div>

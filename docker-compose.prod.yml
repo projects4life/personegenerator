@@ -11,12 +11,11 @@ services:
       - app
 
   app:
-    build: .
+    image: europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:${TAG}
     command: gunicorn --bind 0.0.0.0:5000 app:app
     depends_on:
       mongo:
         condition: service_healthy
-    image: personagetnerator
     ports:
       - 5000:5000
     volumes:
@@ -28,6 +27,7 @@ services:
       - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
       - APP_USER=${APP_USER}
       - APP_PASSWORD=${APP_PASSWORD}
+      - MONGO_URL=${MONGO_URL}
 
   mongo:
     image: mongo
