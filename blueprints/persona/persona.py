@@ -138,7 +138,7 @@ def send_info_to_chat_gpt(data_about_person):
     """
     openai.api_key = os.getenv("OPENAI_API_KEY")
     
-    promt_to_chatGpt= f"fill in the missing sections for me... be creative. the age is {data_about_person['age']} and the gender is {data_about_person['gender']} all keys must start with capital letter\r\n\r\nName: (choose a name+ last name. dont use common names)\r\nAge: (what I provided)\r\nGender: (what I provided)\r\nHobbies: (at least 3. type string)\r\nJob: (according to the age and education)\r\nEducation: (only name of the degree if he/she got one. don't incloud location)\r\nBackground:  (no less than 75 words)\r\nHometown: (country,state,city)(choose places from all around the planet. string not list )\r\n\r\nPlease generate a JSON response with this information(make sure this is correct JSON), replace all the information with the instructions inside do not add sub-fields to location and education!!!!!"
+    promt_to_chatGpt= f"fill in the missing sections for me... be creative. the age is {data_about_person['age']} and the gender is {data_about_person['gender']} all keys must start with capital letter\r\n\r\nName: (choose a name+ last name. dont use common names)\r\nAge: (what I provided)\r\nGender: (what I provided)\r\nHobbies: (at least 3. type string)\r\nJob: (according to the age and education)\r\nEducation: (only name of the degree if he/she got one. don't incloud location)\r\nBackground:  (no less than 75 words)\r\nHometown: (country,state,city)(choose places from all around the planet. string not list )\r\n\r\nPlease generate a JSON response with this information(make sure this is correct JSON), replace all the information with the instructions inside do not add sub-fields to location and education!!!!!. ALL keys MUST start with capital letter"
     
     gpt_respose = chat_get_response(promt_to_chatGpt)
 
@@ -151,8 +151,6 @@ def send_info_to_chat_gpt(data_about_person):
     while attempts < max_attempts:
         try:
             json_response = json.loads(gpt_respose.choices[0].text)
-            data = json_response["Background"]
-            data = json_response["Hometown"]
             break  # exit the loop if successful
         except:
             attempts += 1  # increment attempts count if unsuccessful
@@ -160,8 +158,9 @@ def send_info_to_chat_gpt(data_about_person):
             if attempts == max_attempts:
                 raise  # raise an exception if maximum attempts exceeded
     
+    json_response = {key.capitalize(): value for key, value in json_response.items()}
     return json_response
-    
+
 def chat_get_response(promt_to_chatGpt):
     """
     This Function sends a promt to chatGpt and return the response
