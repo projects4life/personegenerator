@@ -74,9 +74,10 @@ def protected():
     return 'Logged in as: ' + flask_login.current_user.id
 
 @login_page.route('/logout')
+@flask_login.login_required
 def logout():
     flask_login.logout_user()
-    return 'Logged out'
+    return redirect(url_for('index'))
 
 @login_manager.unauthorized_handler
 def unauthorized_handler():
