@@ -1,20 +1,23 @@
 version: '3.1'
 
 services:
-  proxy:
-    image: nginx
-    ports:
-      - 80:80
-    volumes:
-        - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-    depends_on:
-      - app
+  # proxy:
+  #   image: nginx
+  #   ports:
+  #     - 80:80
+  #   volumes:
+  #       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+  #   depends_on:
+  #     - app
   app:
     build: .
     command: python app.py
+    # depends_on:
+    #   mongo:
+    #     condition: service_healthy
     image: personagetnerator
     ports:
-      - 5000:5000
+      - 8080:8080
     volumes:
       - ~/.aws:/root/.aws
     environment:
@@ -24,7 +27,7 @@ services:
       - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
       - APP_USER=${APP_USER}
       - APP_PASSWORD=${APP_PASSWORD}
-      - MONGO_URL=${MONGO_URL_TESTS}
+      - MONGO_URL=${MONGO_URL}
   # mongo:
   #   image: mongo
   #   restart: always
