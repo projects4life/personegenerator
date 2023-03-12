@@ -2,9 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ "devops", "feature/*" ]
-  pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "devops", "feature/*" ]
     
 env:
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
