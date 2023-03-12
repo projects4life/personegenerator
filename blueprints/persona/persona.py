@@ -110,7 +110,7 @@ def get_image_info_from_aws(photo):
     #print('Detected faces for ' + photo)    
     for faceDetail in response['FaceDetails']:
         #print('The detected face is around ' + str(int(faceDetail['AgeRange']['Low']) + int(faceDetail['AgeRange']['High']) / 2 ))
-        age = str(((int(faceDetail['AgeRange']['High']) - int(faceDetail['AgeRange']['Low'])) // 4) + int(faceDetail['AgeRange']['Low']))
+        age = str((int(faceDetail['AgeRange']['High']) + int(faceDetail['AgeRange']['Low'])) // 2 )
         #print("gender: " + str(faceDetail['Gender']['Value']) + " with " + str(faceDetail['Gender']['Confidence']) + "%" )
         gender = str(faceDetail['Gender']['Value'])
         #print("smile: " + str(faceDetail['Smile']['Value']) + " with " + str(faceDetail['Smile']['Confidence']) + "%" )
@@ -138,7 +138,7 @@ def send_info_to_chat_gpt(data_about_person):
     """
     openai.api_key = os.getenv("OPENAI_API_KEY")
     
-    promt_to_chatGpt= f"fill in the missing sections for me... be creative. the age is {data_about_person['age']} and the gender is {data_about_person['gender']} all keys must start with capital letter\r\n\r\nName: (choose a name+ last name. dont use common names)\r\nAge: (what I provided)\r\nGender: (what I provided)\r\nHobbies: (at least 3. type string)\r\nJob: (according to the age and education)\r\nEducation: (only name of the degree if he/she got one. don't incloud location)\r\nBackground:  (no less than 75 words)\r\nHometown: (country,state,city)(choose places from all around the planet. string not list )\r\n\r\nPlease generate a JSON response with this information(make sure this is correct JSON), replace all the information with the instructions inside do not add sub-fields to location and education!!!!!. ALL keys MUST start with capital letter"
+    promt_to_chatGpt= f"fill in the missing sections for me... be creative. the age is {data_about_person['age']} and the gender is {data_about_person['gender']} all keys must start with capital letter\r\n\r\nName: (choose a name+ last name. do not use common names, choose not widely used names)\r\nAge: (what I provided)\r\nGender: (what I provided)\r\nHobbies: (at least 3. type string)\r\nJob: (according to the age and education)\r\nEducation: (only name of the degree if he/she got one. don't incloud location)\r\nBackground:  (no less than 75 words)\r\nHometown: (country,state,city)(choose places from all around the planet. string not list )\r\n\r\nPlease generate a JSON response with this information(make sure this is correct JSON), replace all the information with the instructions inside do not add sub-fields to location and education!!!!!. ALL keys MUST start with capital letter"
     
     gpt_respose = chat_get_response(promt_to_chatGpt)
 
