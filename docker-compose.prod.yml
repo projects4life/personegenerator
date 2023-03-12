@@ -12,7 +12,7 @@ services:
 
   app:
     image: europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:${TAG}
-    command: gunicorn --bind 0.0.0.0:5000 app:app
+    command: gunicorn --bind 0.0.0.0:8080 app:app
     depends_on:
       mongo:
         condition: service_healthy

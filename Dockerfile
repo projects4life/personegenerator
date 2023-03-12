@@ -15,3 +15,4 @@ COPY app.py .
 
 COPY blueprints/ ./blueprints
 
+ENTRYPOINT ["gunicorn", "--bind", "0.0.0.0:8080", "app:app"]
