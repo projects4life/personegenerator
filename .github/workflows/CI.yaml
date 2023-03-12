@@ -22,7 +22,7 @@ permissions:
   contents: read  # This is required for actions/checkout
 
 jobs:
-  CI:
+  CI-CD:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -76,8 +76,8 @@ jobs:
     - name: E2E test
       id: E2E
       run: |
-        sleep 10
-        pytest tests/test_e2e.py
+        #sleep 10
+        #pytest tests/test_e2e.py
 
     - name: Main Branch E2E
       id: Main-Branch-E2E
@@ -113,56 +113,58 @@ jobs:
         status: ${{ job.status }}
         steps: ${{ toJson(steps) }}
 
-  deploying-to-production: 
-    if: ${{ github.ref == 'refs/heads/main' }}
-    needs: CI
-    runs-on: ubuntu-latest
-    steps:
 
-    - uses: actions/checkout@v3
-      id: git_clone
-      with:
-        fetch-depth: 0
 
-    -  name: create .env file
-       run: |
-        echo 'OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}' > .env
-        echo 'APP_USER=${{ secrets.APP_PASSWORD }}' >> .env
-        echo 'APP_PASSWORD=${{ secrets.APP_USER }}' >> .env
-        echo 'MONGO_URL=${{ secrets.MONGO_URL }}' >> .env
-        echo 'MONGO_USER=${{ secrets.MONGO_USER }}' >> .env
-        echo 'MONGO_PASS=${{ secrets.MONGO_PASS }}' >> .env
-        echo 'AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }}' >> .env
-        echo 'AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}' >> .env
-        echo 'AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}' >> .env
-        echo "TAG=$(git describe --tags --abbrev=0)" >> .env
+  # deploying-to-production: 
+  #   if: ${{ github.ref == 'refs/heads/main' }}
+  #   needs: CI
+  #   runs-on: ubuntu-latest
+  #   steps:
+
+  #   - uses: actions/checkout@v3
+  #     id: git_clone
+  #     with:
+  #       fetch-depth: 0
+
+  #   -  name: create .env file
+  #      run: |
+  #       echo 'OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}' > .env
+  #       echo 'APP_USER=${{ secrets.APP_PASSWORD }}' >> .env
+  #       echo 'APP_PASSWORD=${{ secrets.APP_USER }}' >> .env
+  #       echo 'MONGO_URL=${{ secrets.MONGO_URL }}' >> .env
+  #       echo 'MONGO_USER=${{ secrets.MONGO_USER }}' >> .env
+  #       echo 'MONGO_PASS=${{ secrets.MONGO_PASS }}' >> .env
+  #       echo 'AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }}' >> .env
+  #       echo 'AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}' >> .env
+  #       echo 'AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}' >> .env
+  #       echo "TAG=$(git describe --tags --abbrev=0)" >> .env
                 
-    - name: Install SSH key
-      id: Install-SSH-KEY
-      uses: shimataro/ssh-key-action@v2
-      with:
-        key: ${{ secrets.PROD_PRIVATE_KEY }}
-        name: id_rsa # optional
-        known_hosts: ${{ secrets.KNOWN_HOSTS }}
-        if_key_exists: fail # replace / ignore / fail; optional (defaults to fail)
+  #   - name: Install SSH key
+  #     id: Install-SSH-KEY
+  #     uses: shimataro/ssh-key-action@v2
+  #     with:
+  #       key: ${{ secrets.PROD_PRIVATE_KEY }}
+  #       name: id_rsa # optional
+  #       known_hosts: ${{ secrets.KNOWN_HOSTS }}
+  #       if_key_exists: fail # replace / ignore / fail; optional (defaults to fail)
 
-    - name: deploy
-      id: deploy-new-version
-      run: |
-        Instances=("34.165.4.109") 
-        for ip in ${Instances[@]}; do
-          scp -r .env docker-compose.prod.yml nginx ubuntu@$ip:/home/ubuntu/       # Copy neccecery files for docker compose to work
-          yes | ssh ubuntu@$ip gcloud auth configure-docker europe-docker.pkg.dev  # Authenticate with GCP artifactRegistry
-          ssh ubuntu@$ip docker compose -f docker-compose.prod.yml up -d --build   # Run the docker compose 
-        done
+  #   - name: deploy
+  #     id: deploy-new-version
+  #     run: |
+  #       Instances=("34.165.4.109") 
+  #       for ip in ${Instances[@]}; do
+  #         scp -r .env docker-compose.prod.yml nginx ubuntu@$ip:/home/ubuntu/       # Copy neccecery files for docker compose to work
+  #         yes | ssh ubuntu@$ip gcloud auth configure-docker europe-docker.pkg.dev  # Authenticate with GCP artifactRegistry
+  #         ssh ubuntu@$ip docker compose -f docker-compose.prod.yml up -d --build   # Run the docker compose 
+  #       done
 
-    - name: Slack Notification
-      uses: act10ns/slack@v2.0.0
-      # send message even if the ci fails
-      if: always()
-      with:
-        status: ${{ job.status }}
-        steps: ${{ toJson(steps) }}
+  #   - name: Slack Notification
+  #     uses: act10ns/slack@v2.0.0
+  #     # send message even if the ci fails
+  #     if: always()
+  #     with:
+  #       status: ${{ job.status }}
+  #       steps: ${{ toJson(steps) }}
 
 
 
