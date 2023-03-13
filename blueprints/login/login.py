@@ -2,10 +2,10 @@ from flask import Blueprint, render_template, request, redirect, url_for
 import flask_login
 import os
 from blueprints.persona.persona import render_persona
+import ast
 
 #Env
-username = os.environ.get("APP_USER")
-password = os.environ.get("APP_PASSWORD")
+full_users = os.environ.get("USERS")
 
 login_page = Blueprint('login_page', __name__, template_folder="templates")
 login_manager = flask_login.LoginManager()
@@ -16,7 +16,8 @@ def on_load(state):
     app = state.app
     login_manager.init_app(app)
 
-users = {username: {'password': password}}
+users = ast.literal_eval(full_users)
+
 
 class User(flask_login.UserMixin):
     pass
