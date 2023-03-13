@@ -108,7 +108,7 @@ jobs:
     - name: deploying-to-production
       id: deploying-to-production
       run: |
-        gcloud run services update personagenerator --platform=managed --image=europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:${{ steps.tag.outputs.new_tag }} --region=me-west1
+        gcloud run services update personagenerator --platform=managed --image=europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:0.1.6 --region=me-west1
 
 
 
