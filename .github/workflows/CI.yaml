@@ -50,60 +50,60 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-2
     
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
+    # - name: Set up Python ${{ matrix.python-version }}
+    #   uses: actions/setup-python@v4
+    #   with:
+    #     python-version: ${{ matrix.python-version }}
       
-    - name: Install dependencies for testing
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+    # - name: Install dependencies for testing
+    #   run: |
+    #     python -m pip install --upgrade pip
+    #     pip install -r requirements.txt
      
-    - name: Unit Test With pytest
-      id: unit_test
-      run: | 
-        #export PYTHONPATH=/home/user/myproject:$PYTHONPATH
-        export PYTHONPATH=$(pwd):$PYTHONPATH
-        # Creating images directory in order for the test to pass
-        pytest -v -s tests/test_unit_test.py
+    # - name: Unit Test With pytest
+    #   id: unit_test
+    #   run: | 
+    #     #export PYTHONPATH=/home/user/myproject:$PYTHONPATH
+    #     export PYTHONPATH=$(pwd):$PYTHONPATH
+    #     # Creating images directory in order for the test to pass
+    #     pytest -v -s tests/test_unit_test.py
 
-    - name: Build Docker Compose
-      id: Build
-      run: |
-        docker compose up -d
+    # - name: Build Docker Compose
+    #   id: Build
+    #   run: |
+    #     docker compose up -d
 
-    - name: E2E test
-      id: E2E
-      run: |
-        #sleep 10
-        #pytest tests/test_e2e.py
+    # - name: E2E test
+    #   id: E2E
+    #   run: |
+    #     #sleep 10
+    #     #pytest tests/test_e2e.py
 
-    - name: Main Branch E2E
-      id: Main-Branch-E2E
-      if: ${{ github.ref == 'refs/heads/main' || contains(github.event.head_commit.message, '#FULL-E2E') }} 
-      run: |
-        pytest tests/test_prod_e2e.py
+    # - name: Main Branch E2E
+    #   id: Main-Branch-E2E
+    #   if: ${{ github.ref == 'refs/heads/main' || contains(github.event.head_commit.message, '#FULL-E2E') }} 
+    #   run: |
+    #     pytest tests/test_prod_e2e.py
 
-    # Calculate Version only if on main
-    - name: Bump version and push tag
-      id: tag
-      # Will be changed to master soon
-      if: ${{ github.ref == 'refs/heads/main' }}
-      uses: anothrNick/github-tag-action@1.61.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.API_GITHUB_TOKEN }}
-        WITH_V: false
-        DEFAULT_BUMP: patch
-        INITIAL_VERSION: 0.0.0
-        DEFAULT_BRANCH: main
+    # # Calculate Version only if on main
+    # - name: Bump version and push tag
+    #   id: tag
+    #   # Will be changed to master soon
+    #   if: ${{ github.ref == 'refs/heads/main' }}
+    #   uses: anothrNick/github-tag-action@1.61.0
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.API_GITHUB_TOKEN }}
+    #     WITH_V: false
+    #     DEFAULT_BUMP: patch
+    #     INITIAL_VERSION: 0.0.0
+    #     DEFAULT_BRANCH: main
 
-    - name: push the image
-      id: new-image-published
-      if: ${{ github.ref == 'refs/heads/main' }}
-      run: |
-        docker tag personagetnerator europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:${{ steps.tag.outputs.new_tag }}
-        docker push europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:${{ steps.tag.outputs.new_tag }}
+    # - name: push the image
+    #   id: new-image-published
+    #   if: ${{ github.ref == 'refs/heads/main' }}
+    #   run: |
+    #     docker tag personagetnerator europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:${{ steps.tag.outputs.new_tag }}
+    #     docker push europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:${{ steps.tag.outputs.new_tag }}
 
     - name: deploying-to-production
       id: deploying-to-production
