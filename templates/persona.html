@@ -18,7 +18,7 @@
 	<meta property="og:type" content="article" />
 
     <!-- Website Title -->
-    <title>Log In - Tivo - SaaS App HTML Landing Page Template</title>
+    <title>PersonaGenerator</title>
     
     <!-- Styles -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700&display=swap&subset=latin-ext" rel="stylesheet">
@@ -27,6 +27,7 @@
     <link href="static/css/swiper.css" rel="stylesheet">
     <link href="static/css/magnific-popup.css" rel="stylesheet">
     <link href="static/css/styles.css" rel="stylesheet">
+    <link rel="icon" href="static/images/favicon.png">
 
     <style>
       body {
@@ -121,17 +122,17 @@
             
             <div class="col data">
               <div class="card">
-                <div class="card-header">Backgound</div>
-                <div class="card-body">{{ image_data }}</div>
-                <div class="card-footer">
-                  {% if user %}
-                    <button class="btn btn-primary" onclick="window.location.href='/admin'">Refresh</button>
-                  {% else %}
-                    <button class="btn btn-primary" onclick="window.location.href='/persona'">Refresh</button>
-                  {% endif %}
-                </div>
+                <div class="card-header text-center">Background</div>  
+                <div class="card-body text-center">{{ image_data }}</div>
+                  <div class="card-footer text-center">
+                      {% if user %}
+                          <button class="btn btn-primary" onclick="window.location.href='/admin'">Refresh</button>
+                      {% else %}
+                          <button class="btn btn-primary" onclick="window.location.href='/persona'">Refresh</button>
+                      {% endif %}
+                  </div>
               </div>
-            </div>
+          </div>
 
 
 
