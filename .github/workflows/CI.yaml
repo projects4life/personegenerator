@@ -104,7 +104,14 @@ jobs:
       run: |
         docker tag personagetnerator europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:${{ steps.tag.outputs.new_tag }}
         docker push europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:${{ steps.tag.outputs.new_tag }}
-                     
+
+    - name: deploying-to-production
+      id: deploying-to-production
+      run: |
+        gcloud run services update personagenerator --platform=managed --image=europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:${{ steps.tag.outputs.new_tag }} --region=me-west1
+
+
+
     - name: Slack Notification
       uses: act10ns/slack@v2.0.0
       # send message even if the ci fails
@@ -112,6 +119,8 @@ jobs:
       with:
         status: ${{ job.status }}
         steps: ${{ toJson(steps) }}
+    
+    
 
 
 
