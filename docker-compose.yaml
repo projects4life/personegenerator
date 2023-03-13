@@ -25,8 +25,7 @@ services:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
-      - APP_USER=${APP_USER}
-      - APP_PASSWORD=${APP_PASSWORD}
+      - USERS=${USERS}
       - MONGO_URL=${MONGO_URL}
   # mongo:
   #   image: mongo
