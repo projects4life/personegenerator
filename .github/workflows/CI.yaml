@@ -10,8 +10,8 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-  APP_USER: ${{ secrets.APP_PASSWORD }}
-  APP_PASSWORD: ${{ secrets.APP_USER }}
+  APP_USER: ${{ secrets.APP_USER }}
+  APP_PASSWORD: ${{ secrets.APP_PASSWORD}}
   MONGO_URL: ${{ secrets.MONGO_URL }}
   MONGO_URL_TESTS: ${{ secrets.MONGO_URL_TESTS }} 
   USERS: ${{ secrets.USERS }} 
