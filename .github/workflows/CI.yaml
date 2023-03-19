@@ -75,8 +75,8 @@ jobs:
     - name: E2E test
       id: E2E
       run: |
-        sleep 10
-        curl localhost:8080
+        sleep 20
+        curl localhost:8080/personaR
         pytest tests/test_e2e.py
       
 
