@@ -76,7 +76,9 @@ jobs:
       id: E2E
       run: |
         sleep 10
+        curl localhost:8080
         pytest tests/test_e2e.py
+      
 
     - name: Main Branch E2E
       id: Main-Branch-E2E
