@@ -75,12 +75,14 @@ jobs:
     - name: E2E test
       id: E2E
       run: |
-        #sleep 10
-        #pytest tests/test_e2e.py
+        sleep 20
+        curl localhost:8080/personaR
+        pytest tests/test_e2e.py
+      
 
     - name: Main Branch E2E
       id: Main-Branch-E2E
-      if: ${{ github.ref == 'refs/heads/main' || contains(github.event.head_commit.message, '#FULL-E2E') }} 
+      # if: ${{ github.ref == 'refs/heads/main' || contains(github.event.head_commit.message, '#FULL-E2E') }} 
       run: |
         pytest tests/test_prod_e2e.py
 
@@ -88,7 +90,7 @@ jobs:
     - name: Bump version and push tag
       id: tag
       # Will be changed to master soon
-      if: ${{ github.ref == 'refs/heads/main' }}
+      # if: ${{ github.ref == 'refs/heads/main' }}
       uses: anothrNick/github-tag-action@1.61.0
       env:
         GITHUB_TOKEN: ${{ secrets.API_GITHUB_TOKEN }}
@@ -99,11 +101,19 @@ jobs:
 
     - name: push the image
       id: new-image-published
-      if: ${{ github.ref == 'refs/heads/main' }}
+      #if: ${{ github.ref == 'refs/heads/main' }}
       run: |
         docker tag personagetnerator europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:${{ steps.tag.outputs.new_tag }}
         docker push europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:${{ steps.tag.outputs.new_tag }}
                      
+
+    - name: deploy to cloudRun
+      id: cloud-run-deploy
+      # if: ${{ github.ref == 'refs/heads/main' }}
+      run: |
+        gcloud run services update personagenerator --project=personagenerator-379008  --image europe-docker.pkg.dev/personagenerator-379008/personagenerator/personegenerator:${{ steps.tag.outputs.new_tag }} --region me-west1
+
+
     - name: Slack Notification
       uses: act10ns/slack@v2.0.0
       # send message even if the ci fails
