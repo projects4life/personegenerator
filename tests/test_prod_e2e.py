@@ -32,6 +32,7 @@ def test_limitter():
     print(response)
     assert response.status_code == 429
 
+
 def test_login():
     payload = {
     "email": username,
