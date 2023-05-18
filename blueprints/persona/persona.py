@@ -65,7 +65,7 @@ def get_random_image():
     """
     # Sending a request
     url = "https://this-person-does-not-exist.com/en"
-    response = requests.get(url)
+    response = requests.get(url, timeout = 60)
     # parsing the response 
     soup = BeautifulSoup(response.text, "html.parser")
     img = soup.find("img", {"id": "avatar"})

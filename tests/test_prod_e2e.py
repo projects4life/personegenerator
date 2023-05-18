@@ -29,7 +29,6 @@ def test_limitter():
         # assert response.status_code == 200 
     
     response = requests.get(f"{ENDPOINT}/personaR")
-    print(response)
     assert response.status_code == 429
 
 
@@ -43,7 +42,7 @@ def test_login():
     "email": "STUFF",
     "password": "TO TESTS"
     }
-
+    print("here")
     response = subprocess.check_output(['curl', '-s', '-o', '/dev/null', '-w', '%{http_code}', ENDPOINT + '/admin'])
     response = int(response.decode().strip())
     assert response == 302
