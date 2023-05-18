@@ -71,14 +71,12 @@ jobs:
       id: Build
       run: |
         docker compose up -d
-        docker ps 
-        docker logs personegenerator-app-1
 
     - name: E2E test
       id: E2E
       run: |
         sleep 20
-        curl localhost:8080/personaR
+        # curl localhost:8080/personaR --connect-timeout 30
         pytest tests/test_e2e.py
       
 
