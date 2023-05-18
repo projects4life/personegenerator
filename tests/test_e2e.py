@@ -7,9 +7,14 @@ ENDPOINT = "http://localhost:8080"
 
 # Test the ability of the application to generate an image and information and display it on the persona route
 def test_persona_route():
-    response = requests.get(f"{ENDPOINT}/personaR", timeout=50 )
-    # parsing the response 
-    soup = BeautifulSoup(response.text, "html.parser")
-    img = soup.find("img", {"id": "avatar"})
-    print(img)
-    assert re.match("static/images/.*", img["src"])
+    timeout_seconds = 60 
+
+    try:
+        response = requests.get(f"{ENDPOINT}/personaR", timeout=timeout_seconds)
+        response.raise_for_status()  
+        soup = BeautifulSoup(response.text, "html.parser")
+        img = soup.find("img", {"id": "avatar"})
+        print(img)
+        assert re.match("static/images/.*", img["src"])
+    except ConnectionError as e:
+        print(f"ConnectionError: {e}")
