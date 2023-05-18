@@ -65,13 +65,13 @@ def get_random_image():
     """
     # Sending a request
     url = "https://this-person-does-not-exist.com/en"
-    response = requests.get(url, timeout = 60)
+    response = requests.get(url, timeout=60)
     # parsing the response 
     soup = BeautifulSoup(response.text, "html.parser")
     img = soup.find("img", {"id": "avatar"})
     random_image_url=f"https://this-person-does-not-exist.com{img['src']}"
     # saving it into a file
-    image = requests.get(random_image_url, timeout = 60)
+    image = requests.get(random_image_url, timeout=60)
     # filename = "static/images/random-face.jpg"
     filename = f"static/images/random-face-{str(uuid.uuid4())}.jpg"
     with open(filename, "wb") as file:
