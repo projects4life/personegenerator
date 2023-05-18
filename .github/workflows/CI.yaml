@@ -71,6 +71,8 @@ jobs:
       id: Build
       run: |
         docker compose up -d
+        docker ps 
+        docker logs personegenerator-app-1
 
     - name: E2E test
       id: E2E
