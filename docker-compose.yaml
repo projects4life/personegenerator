@@ -11,7 +11,7 @@ services:
   #     - app
   app:
     build: .
-    command: python app.py
+    #command: python app.py
     # depends_on:
     #   mongo:
     #     condition: service_healthy
