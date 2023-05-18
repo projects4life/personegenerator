@@ -10,7 +10,7 @@ password = os.environ.get("APP_PASSWORD")
 
 
 ENDPOINT = "http://localhost:8080"
-LIMIT = 5
+LIMIT = 4
 
 def test_limitter():
     ###check that the first 5 times are ok
